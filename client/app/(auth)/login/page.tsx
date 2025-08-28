@@ -1,36 +1,40 @@
 "use client";
 
-import { Card, Checkbox, Input } from "@heroui/react";
+import { Button, Card, Checkbox, Input } from "@heroui/react";
+import { useState } from "react";
 import { FaFacebookF, FaGoogle } from "react-icons/fa";
 
 export default function LoginPage() {
+  const [isRegister, setIsRegister] = useState(false);
+
   return (
     <Card className="">
       <div className="flex">
         <div className="flex-1 flex items-center justify-center p-8 bg-white">
           <div className="w-full max-w-md">
             <h1 className="text-2xl text-[#124170] font-bold mb-6">
-              Log in to your Account
+              {isRegister ? "Create a New Account" : "Log in to your Account"}
             </h1>
 
-            <div className="flex flex-col gap-3 mb-4">
-              <button
-                className="flex items-center justify-center gap-2 
-              border rounded-lg py-2 px-4 bg-red-700 text-white hover:text-red-500 hover:bg-white"
-              >
-                <FaGoogle />
-                Continue with Google
-              </button>
-              <button
-                className="flex items-center justify-center gap-2 
-              border rounded-lg py-2 px-4 bg-blue-500 text-white hover:bg-white hover:text-blue-500"
-              >
-                <FaFacebookF className="text-blue-500" />
-                Continue with Facebook
-              </button>
+            <div className="flex flex-row justify-center gap-3 mb-4">
+              <Button color="danger" size="md" className="p-2" radius="sm">
+                <FaGoogle className="text-4xl" />
+              </Button>
+              <Button color="primary" size="md" className="p-2" radius="sm">
+                <FaFacebookF className="text-4xl" />
+              </Button>
             </div>
 
             <form className="flex flex-col gap-4">
+              {isRegister && (
+                <Input
+                  label="Name"
+                  placeholder="Enter your full name"
+                  type="text"
+                  className="mb-4"
+                />
+              )}
+
               <Input
                 label="Email"
                 placeholder="Enter your email"
@@ -45,22 +49,45 @@ export default function LoginPage() {
                 className="mb-4"
               />
 
-              <div className="flex justify-between items-center text-sm">
-                <label>
-                  <Checkbox>Remember me</Checkbox>
-                </label>
-                <a href="#" className="text-blue-600 hover:underline">
-                  Forgot password?
-                </a>
-              </div>
-              <button className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                Log In
-              </button>
+              {isRegister && (
+                <Input
+                  label="Confirm Password"
+                  placeholder="Confirm your password"
+                  type="password"
+                  className="mb-4"
+                />
+              )}
+
+              {!isRegister && (
+                <div className="flex justify-between items-center text-sm">
+                  <label>
+                    <Checkbox>Remember me</Checkbox>
+                  </label>
+                  <a href="#" className="text-blue-600 hover:underline">
+                    Forgot password?
+                  </a>
+                </div>
+              )}
+
+              <Button
+                color="primary"
+                variant="shadow"
+                className="text-white py-2 rounded-lg"
+              >
+                {isRegister ? "Register" : "Log In"}
+              </Button>
+
               <p className="text-center text-sm">
-                Don’t have an account?{" "}
-                <a href="#" className="text-blue-600 hover:underline">
-                  Create an account
-                </a>
+                {isRegister
+                  ? "Already have an account?"
+                  : "Don’t have an account?"}{" "}
+                <button
+                  type="button"
+                  className="text-blue-600 hover:underline"
+                  onClick={() => setIsRegister(!isRegister)}
+                >
+                  {isRegister ? "Log in" : "Create an account"}
+                </button>
               </p>
             </form>
           </div>
