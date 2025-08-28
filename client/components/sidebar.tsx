@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Sidebar() {
   return (
     <div className="h-screen bg-[#fdfaf6] text-[#4a3f35] overflow-hidden">
-      <aside className="fixed top-0 left-0 h-screen w-64 bg-[#5D688A] p-6 shadow-lg overflow-hidden">
+      <aside className="fixed top-0 left-0 h-screen w-64 bg-[#124170] p-6 shadow-lg overflow-hidden">
         <h1 className="text-2xl font-bold mb-8 text-center text-[#DDF4E7]">
           TODO LIST
         </h1>

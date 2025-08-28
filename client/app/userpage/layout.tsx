@@ -34,13 +34,12 @@ export default function UserLayout({
         <Sidebar />
       </aside>
 
-      <div className="flex flex-col flex-1 lg:ml-64">
-        <Navbar />
+      <div className="flex-1 ml-0 lg:ml-64">
+        <div className="fixed top-0 left-0 lg:left-64 right-0 z-50 mb-4">
+          <Navbar />
+        </div>
 
-        <main
-          className="flex-1 overflow-y-auto container 
-              mx-auto max-w-7xl px-6 py-6 flex flex-col items-center"
-        >
+        <main className="flex-1 overflow-y-auto px-6 py-6 container mx-auto max-w-7xl flex flex-col gap-6">
           {children}
         </main>
       </div>

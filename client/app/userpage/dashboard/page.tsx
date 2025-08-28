@@ -17,7 +17,7 @@ import { RiProgress3Line } from "react-icons/ri";
 
 const Dashboard = () => {
   return (
-    <section className="">
+    <section>
       <div>
         <Card className="w-full">
           <CardHeader className="flex items-center gap-3">
