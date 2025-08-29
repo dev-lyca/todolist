@@ -1,4 +1,5 @@
 "use client";
+import { useUser } from "@/context/userContext";
 import {
   Card,
   CardBody,
@@ -10,14 +11,23 @@ import {
   DropdownTrigger,
   Image,
 } from "@heroui/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { FaCheckCircle, FaRegClipboard } from "react-icons/fa";
 import { IoBarChart, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { RiProgress3Line } from "react-icons/ri";
 
 const Dashboard = () => {
+  const router = useRouter();
+  const { user } = useUser();
+  const firstName = user?.displayName?.split(" ")[0];
+
   return (
-    <section>
+    <section className="mt-14">
+      <h1 className="text-2xl mb-2 text-[#124170] font-bold">
+        Welcome back, {firstName}!
+      </h1>
       <div>
         <Card className="w-full">
           <CardHeader className="flex items-center gap-3">

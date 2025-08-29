@@ -15,11 +15,11 @@ export const siteConfig = {
     },
     {
       label: "My Tasks",
-      href: "/projects",
+      href: "/mytasks",
     },
     {
       label: "Categories",
-      href: "/team",
+      href: "/categories",
     },
     {
       label: "Logout",
@@ -29,17 +29,17 @@ export const siteConfig = {
  sideBarItems: [
     {
       label: "Dashboard",
-      href: "/",
+      href: "/userpage/dashboard",
       icon: MdOutlineDashboardCustomize,
     },
     {
       label: "My Task",
-      href: "/tasks",
+      href: "/userpage/mytasks",
       icon: MdOutlineTask,
     },
     {
       label: "Task Categories",
-      href: "/task-categories",
+      href: "/userpage/categories",
       icon: MdFormatListBulleted,
     },
   ],

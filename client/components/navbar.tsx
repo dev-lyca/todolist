@@ -2,6 +2,7 @@
 
 import { SearchIcon } from "@/components/icons";
 import { siteConfig } from "@/config/site";
+import { useUser } from "@/context/userContext";
 import {
   Dropdown,
   DropdownItem,
@@ -21,8 +22,27 @@ import {
 } from "@heroui/navbar";
 import { Avatar } from "@heroui/react";
 import { MdLogout } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
+  const router = useRouter();
+  const { user } = useUser();
+
+  // const handleLogout = async () => {
+  //   try {
+  //     const res = await fetch("http://localhost:8080/api/auth/logout", {
+  //       method: "POST",
+  //       credentials: "include",
+  //     });
+
+  //     if (res.ok) {
+  //       router.replace("/login");
+  //     }
+  //   } catch (err) {
+  //     console.error("Logout failed", err);
+  //   }
+  // };
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -54,8 +74,8 @@ export const Navbar = () => {
       <NavbarContent justify="end" className="hidden lg:flex">
         <NavbarItem>
           <Dropdown>
-            <DropdownTrigger>
-              <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+            <DropdownTrigger className="flex items-center gap-1">
+              <div>{user?.photo && <Avatar src={user.photo} />}</div>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
               <DropdownItem key="logout" className="px-2 py-1 text-danger">

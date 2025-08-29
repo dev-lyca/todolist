@@ -1,7 +1,14 @@
 "use client";
 import DataTable from "@/components/datatable";
+import TaskModal from "@/components/modal";
 import { Column } from "@/types/index";
-import { Button, Card, CardBody, CardHeader } from "@heroui/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  useDisclosure,
+} from "@heroui/react";
 import { FaClipboard, FaPlus } from "react-icons/fa";
 
 type Task = {
@@ -46,9 +53,17 @@ const tasks: Task[] = [
 ];
 
 const MyTasks = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <section className="mt-14">
-      <div className="w-full max-w-7xl mx-auto px-4">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-end mb-2">
+          <Button onPress={onOpen} className="bg-[#124170] text-white">
+            <FaPlus />
+            Add New Task
+          </Button>
+        </div>
         <Card className="w-full">
           <CardHeader className="flex justify-between items-center gap-3">
             <div className="flex items-center gap-3">
@@ -59,13 +74,6 @@ const MyTasks = () => {
                   Overview of all tasks
                 </small>
               </div>
-            </div>
-
-            <div>
-              <Button className="bg-[#124170] text-white">
-                <FaPlus />
-                Add New Task
-              </Button>
             </div>
           </CardHeader>
 
@@ -86,6 +94,8 @@ const MyTasks = () => {
           </CardBody>
         </Card>
       </div>
+
+      <TaskModal isOpen={isOpen} onClose={onClose} />
     </section>
   );
 };
