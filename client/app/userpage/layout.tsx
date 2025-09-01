@@ -1,28 +1,9 @@
-import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
-
+"use client";
 import { Navbar } from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
-import { siteConfig } from "@/config/site";
 import { UserProvider } from "@/context/userContext";
-
-export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  icons: {
-    icon: "/favicon.ico",
-  },
-};
-
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-};
+import "@/styles/globals.css";
+import { ToastProvider } from "@heroui/react";
 
 export default function UserLayout({
   children,
@@ -36,6 +17,7 @@ export default function UserLayout({
       </aside>
 
       <UserProvider>
+        <ToastProvider />
         <div className="flex-1 ml-0 lg:ml-64">
           <div className="fixed top-0 left-0 lg:left-64 right-0 z-50 mb-4">
             <Navbar />

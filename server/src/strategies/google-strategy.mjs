@@ -10,7 +10,7 @@ import { GoogleUser } from "../mongoose/schemas/google-user.mjs";
 passport.serializeUser((user, done) => {
   console.log("Inside serialize:");
   console.log(user);
-  done(null, user.id);
+  done(null, user._id);
 });
 
 //after storing the user in the session, passport will call this function
@@ -26,7 +26,6 @@ passport.deserializeUser(async (id, done) => {
     done(err, null);
   }
 });
-
 
 //once the callback is called, passport will call this function
 //to find or create the user in our database

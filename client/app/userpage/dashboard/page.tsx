@@ -26,7 +26,7 @@ const Dashboard = () => {
   return (
     <section className="mt-14">
       <h1 className="text-2xl mb-2 text-[#124170] font-bold">
-        Welcome back, {firstName}!
+        {/* Welcome back, {firstName}! */}
       </h1>
       <div>
         <Card className="w-full">

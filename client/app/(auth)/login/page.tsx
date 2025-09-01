@@ -4,9 +4,9 @@ import { Button, Card } from "@heroui/react";
 import { FaGoogle } from "react-icons/fa";
 
 export default function LoginPage() {
-  const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/api/auth/google";
-  };
+  // const handleGoogleLogin = () => {
+  //   window.location.href = "http://localhost:8080/api/auth/google";
+  // };
 
   return (
     <Card className="">
@@ -23,7 +23,7 @@ export default function LoginPage() {
                 size="md"
                 className="p-2"
                 radius="sm"
-                onPress={handleGoogleLogin}
+                // onPress={handleGoogleLogin}
               >
                 <FaGoogle className="text-4xl" />
                 Login using Google

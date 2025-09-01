@@ -12,18 +12,32 @@ router.get(
 // handling the callback after google has authenticated the user
 router.get(
   "/api/auth/google/redirect",
-  passport.authenticate("google"),
-  (request, response) => {
-    response.redirect("http://localhost:3000/userpage/dashboard");
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  (req, res) => {
+    req.session.user = {
+      _id: req.user._id,
+      googleId: req.user.googleId,
+      displayName: req.user.displayName,
+      email: req.user.email,
+      photo: req.user.photo,
+      createdAt: req.user.createdAt,
+      updatedAt: req.user.updatedAt,
+    };
+
+    req.session.save((err) => {
+      if (err) console.error("Session save error:", err);
+
+      res.redirect("http://localhost:3000/userpage/dashboard");
+    });
   }
 );
 
 // checking if user is logged in and returning user info
-router.get("/api/auth/user", (request, response) => {
-  if (request.isAuthenticated()) {
-    response.json(request.user);
+router.get("/api/auth/user", (req, res) => {
+  if (req.isAuthenticated() && req.user) {
+    res.json(req.user); // return the logged-in user info
   } else {
-    response.redirect("http://localhost:3000/login");
+    res.status(401).json({ error: "User not logged in" });
   }
 });
 

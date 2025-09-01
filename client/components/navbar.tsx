@@ -1,6 +1,5 @@
 "use client";
 
-import { SearchIcon } from "@/components/icons";
 import { siteConfig } from "@/config/site";
 import { useUser } from "@/context/userContext";
 import {
@@ -9,11 +8,9 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@heroui/dropdown";
-import { Input } from "@heroui/input";
 import { Link } from "@heroui/link";
 import {
   Navbar as HeroUINavbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
@@ -21,8 +18,8 @@ import {
   NavbarMenuToggle,
 } from "@heroui/navbar";
 import { Avatar } from "@heroui/react";
-import { MdLogout } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import { MdLogout } from "react-icons/md";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -43,34 +40,12 @@ export const Navbar = () => {
   //   }
   // };
 
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      labelPlacement="outside"
-      placeholder="Search tasks..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
-  );
-
   return (
     <HeroUINavbar
       maxWidth="xl"
       position="sticky"
       className="w-full top-0 z-50 shadow-md"
     >
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarBrand className="gap-3 max-w-fit">
-          <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        </NavbarBrand>
-      </NavbarContent>
-
       <NavbarContent justify="end" className="hidden lg:flex">
         <NavbarItem>
           <Dropdown>
