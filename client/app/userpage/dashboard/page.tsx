@@ -1,5 +1,6 @@
 "use client";
 import { useUser } from "@/context/userContext";
+import useAuth from "@/hooks/useAuth";
 import {
   Card,
   CardBody,
@@ -11,16 +12,15 @@ import {
   DropdownTrigger,
   Image,
 } from "@heroui/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { FaCheckCircle, FaRegClipboard } from "react-icons/fa";
 import { IoBarChart, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { RiProgress3Line } from "react-icons/ri";
 
 const Dashboard = () => {
-  const router = useRouter();
   const { user } = useUser();
+  useAuth(user);
+
   const firstName = user?.displayName?.split(" ")[0];
 
   return (

@@ -25,9 +25,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
   const { user } = useUser();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("pending");
-  const [priority, setPriority] = useState("low");
-  const [category, setCategory] = useState("personal");
+  const [priority, setPriority] = useState("Low");
+  const [category, setCategory] = useState("Personal");
   const [deadline, setDeadline] = useState("");
   const [reminderAt, setReminderAt] = useState("");
   const [loading, isLoading] = useState(false);
@@ -50,7 +49,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
         user: user._id,
         title,
         description,
-        status,
         priority,
         category,
         deadline,
@@ -142,9 +140,9 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
                   selectedKeys={[priority]}
                   onChange={(e) => setPriority(e.target.value)}
                 >
-                  <SelectItem key="low">Low</SelectItem>
-                  <SelectItem key="moderate">Moderate</SelectItem>
-                  <SelectItem key="urgent">Urgent</SelectItem>
+                  <SelectItem key="Low">Low</SelectItem>
+                  <SelectItem key="Moderate">Moderate</SelectItem>
+                  <SelectItem key="Urgent">Urgent</SelectItem>
                 </Select>
 
                 {/* Category (optional) */}
@@ -154,8 +152,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
                   selectedKeys={[category]}
                   onChange={(e) => setCategory(e.target.value)}
                 >
-                  <SelectItem key="personal">Personal</SelectItem>
-                  <SelectItem key="school">School</SelectItem>
+                  <SelectItem key="Personal">Personal</SelectItem>
+                  <SelectItem key="School">School</SelectItem>
                   <SelectItem key="work">Work</SelectItem>
                 </Select>
               </div>

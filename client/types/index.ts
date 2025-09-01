@@ -32,11 +32,12 @@ export interface Task {
   user: string;            
   title: string;            
   description?: string;     
-  status?: "pending" | "in-progress" | "completed";
-  priority?: "low" | "moderate" | "urgent";
-  category?: "personal" | "school" | "work";
+  status: "Pending" | "In-progress" | "Completed";
+  priority?: "Low" | "Moderate" | "Urgent";
+  category?: "Personal" | "School" | "Work";
   deadline?: string;        
   reminderAt?: string;      
+  color: string;      
   createdAt?: string;       
   updatedAt?: string;
 }

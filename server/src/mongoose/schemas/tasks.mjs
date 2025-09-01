@@ -17,18 +17,18 @@ const TaskSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "in-progress", "completed"],
-      default: "pending",
+      enum: ["Pending", "In-progress", "Completed"],
+      default: "Pending",
     },
     priority: {
       type: String,
-      enum: ["low", "moderate", "urgent"],
-      default: "moderate",
+      enum: ["Low", "Moderate", "Urgent"],
+      default: "Moderate",
     },
     category: {
       type: String,
-      enum: ["personal", "school", "work"],
-      default: "personal",
+      enum: ["Personal", "School", "Work"],
+      default: "Personal",
     },
     deadline: {
       type: Date,
@@ -36,11 +36,9 @@ const TaskSchema = new mongoose.Schema(
     reminderAt: {
       type: Date,
     },
-
     color: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Color",
-      required: false,
+      type: String,
+      default: "#FFFFFF",
     },
   },
 

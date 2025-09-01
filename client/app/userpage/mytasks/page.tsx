@@ -1,108 +1,128 @@
 "use client";
 import { SearchIcon } from "@/components/icons";
+import TaskModal from "@/components/modal";
+import { useUser } from "@/context/userContext";
+import useAuth from "@/hooks/useAuth";
+import { Task } from "@/types";
 import { Input } from "@heroui/input";
 import {
   Card,
   CardBody,
   Checkbox,
   Chip,
+  CircularProgress,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@heroui/react";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 
 const MyTasks = () => {
+  const { user } = useUser();
+  useAuth(user);
+  
   const [checked, setChecked] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const {
+    isOpen: isAddOpenn,
+    onOpen: onOpenAdd,
+    onOpenChange: onAddOpenChange,
+  } = useDisclosure();
 
-  const tasks = [
-    {
-      id: 1,
-      title: "Finish the Science Project",
-      description: "Complete the volcano eruption model before the due date.",
-      status: "Pending",
-      dueDate: "August 31, 2025",
-      imageUrl:
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop",
-    },
-    {
-      id: 2,
-      title: "Grocery Shopping",
-      description: "Buy milk, eggs, and vegetables for the week.",
-      status: "Completed",
-      dueDate: "August 25, 2025",
-      imageUrl:
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop",
-    },
-    {
-      id: 3,
-      title: "Team Meeting",
-      description: "Prepare slides for the Monday morning meeting.",
-      status: "In-Progress",
-      dueDate: "September 2, 2025",
-      imageUrl:
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop",
-    },
-    {
-      id: 4,
-      title: "Workout Session",
-      description: "Go for a 5km run in the evening.",
-      status: "Pending",
-      dueDate: "September 1, 2025",
-      imageUrl:
-        "https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=400&h=300&fit=crop",
-    },
-    {
-      id: 5,
-      title: "Read a Book",
-      description: "Finish at least 3 chapters of 'Atomic Habits'.",
-      status: "In-Progress",
-      dueDate: "September 5, 2025",
-      imageUrl:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=300&fit=crop",
-    },
-  ];
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchTasks = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/api/all-tasks", {
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch tasks");
+        }
+
+        const data: Task[] = await res.json();
+        setTasks(data);
+      } catch (err) {
+        console.error("Error fetching tasks:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+
+    const interval = setInterval(fetchTasks, 5000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <CircularProgress aria-label="Loading tasks..." color="primary" />
+      </div>
+    );
+  }
 
   return (
     <section className="mt-14 w-full">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
-        <div className="flex-1 min-w-0">
+        <div className="w-full sm:w-1/2">
+          {" "}
           <Input
             aria-label="Search"
             classNames={{ inputWrapper: "bg-default-100", input: "text-sm" }}
             labelPlacement="outside"
             placeholder="Search tasks..."
             startContent={
-              <SearchIcon
-                className="text-base text-default-400 pointer-events-none 
-              flex-shrink-0"
-              />
+              <SearchIcon className="text-default-400 pointer-events-none flex-shrink-0" />
             }
             type="search"
           />
         </div>
 
         <div className="flex-shrink-0">
-          {!checked ? (
-            <Checkbox isSelected={checked} onValueChange={setChecked}>
-              <span className="text-sm text-default-400">Select Task/s</span>
-            </Checkbox>
-          ) : (
-            <FaTrash
-              size={30}
-              className="text-red-500 cursor-pointer text-xl pr-3"
-              onClick={() => setChecked(false)}
-            />
-          )}
+          <div className="flex gap-2">
+            {!checked && (
+              <FaPlus
+                size={30}
+                className="text-blue-700 cursor-pointer text-xl pr-3"
+                onClick={onOpenAdd}
+              />
+            )}
+            {!checked ? (
+              <div className="flex items-center gap-2">
+                <Checkbox isSelected={checked} onValueChange={setChecked} />
+              </div>
+            ) : (
+              <FaTrash
+                size={30}
+                className="text-red-500 cursor-pointer text-xl pr-3"
+                onClick={() => setChecked(false)}
+              />
+            )}
+          </div>
         </div>
       </div>
 
       <div className="mt-6">
         {tasks.map((task) => (
-          <Card key={task.id} className="mb-4">
+          <Card
+            key={task._id}
+            className="mb-4"
+            style={{ backgroundColor: task.color || "#FFFFFF" }}
+          >
             <CardBody className="w-full">
               <div className="flex flex-row gap-10 items-center">
                 {checked && (
@@ -114,18 +134,20 @@ const MyTasks = () => {
                   <Chip
                     size="sm"
                     color={
-                      task.status === "Completed"
-                        ? "success"
-                        : task.status === "In-Progress"
+                      task.status === "Pending"
+                        ? "default"
+                        : task.status === "In-progress"
                           ? "primary"
-                          : "default"
+                          : "success"
                     }
                   >
                     {task.status}
                   </Chip>
                   <h1 className="text-lg font-bold">{task.title}</h1>
                   <p className="text-sm text-gray-700">{task.description}</p>
-                  <small className="text-gray-500 italic">{task.dueDate}</small>
+                  <small className="text-gray-500 italic">
+                    {task.deadline}
+                  </small>
                 </div>
 
                 <div className="shrink-0 flex flex-col items-end gap-2">
@@ -137,7 +159,13 @@ const MyTasks = () => {
                       />
                     </DropdownTrigger>
                     <DropdownMenu aria-label="Static Actions">
-                      <DropdownItem key="edit">Edit</DropdownItem>
+                      <DropdownItem
+                        key="edit"
+                        as={Link}
+                        href={`/userpage/task/${task._id}`}
+                      >
+                        Edit
+                      </DropdownItem>
                       <DropdownItem
                         key="delete"
                         className="text-danger"
@@ -153,6 +181,7 @@ const MyTasks = () => {
           </Card>
         ))}
       </div>
+      <TaskModal isOpen={isAddOpenn} onClose={onAddOpenChange} />
     </section>
   );
 };

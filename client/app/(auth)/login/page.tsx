@@ -1,54 +1,38 @@
 "use client";
 
 import { Button, Card } from "@heroui/react";
-import { FaGoogle } from "react-icons/fa";
+import { FaGoogle, FaTasks } from "react-icons/fa";
 
 export default function LoginPage() {
-  // const handleGoogleLogin = () => {
-  //   window.location.href = "http://localhost:8080/api/auth/google";
-  // };
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8080/api/auth/google";
+  };
 
   return (
-    <Card className="">
-      <div className="flex">
-        <div className="flex-1 flex items-center justify-center p-8 bg-white">
-          <div className="w-full max-w-md">
-            <h1 className="text-2xl text-[#124170] font-bold mb-6">
-              Log in to your Account
-            </h1>
-
-            <div className="flex flex-row justify-center gap-3 mb-4">
-              <Button
-                color="danger"
-                size="md"
-                className="p-2"
-                radius="sm"
-                // onPress={handleGoogleLogin}
-              >
-                <FaGoogle className="text-4xl" />
-                Login using Google
-              </Button>
-            </div>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+      <Card className="w-full max-w-lg p-8 shadow-xl rounded-2xl bg-white">
+        <div className="flex flex-col items-center text-center">
+          <div className="flex items-center gap-2 mb-4">
+            <FaTasks className="text-3xl text-[#124170]" />
+            <h1 className="text-3xl font-bold text-[#124170]">ToDo List</h1>
           </div>
-        </div>
 
-        <div className="flex-1 bg-[#124170] text-white hidden lg:flex items-center justify-center p-8">
-          <div className="text-center">
-            <img
-              src="/images/auth.png"
-              alt="Illustration"
-              className="mx-auto mb-6 max-h-[60vh]"
-            />
-            <h2 className="text-2xl font-bold mb-2">
-              Stay Organized with Your To-Do List
-            </h2>
-            <p>
-              Manage tasks, set priorities, and track your progress all in one
-              simple dashboard.
-            </p>
-          </div>
+          <p className="text-gray-600 text-sm mb-8">
+            Manage your tasks easily and stay organized every day.
+          </p>
+
+          <Button
+            color="danger"
+            size="lg"
+            className="flex items-center gap-3 px-6 py-3 rounded-xl shadow-md"
+            radius="md"
+            onPress={handleGoogleLogin}
+          >
+            <FaGoogle className="text-xl" />
+            <span className="font-medium">Sign in with Google</span>
+          </Button>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
 }

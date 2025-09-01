@@ -1,6 +1,9 @@
 "use client";
 import CalendarModal from "@/components/calendar-modal";
 import ThemeModal from "@/components/theme-modal";
+import { useUser } from "@/context/userContext";
+import useAuth from "@/hooks/useAuth";
+import { Task } from "@/types";
 import {
   Button,
   Card,
@@ -8,31 +11,79 @@ import {
   CardFooter,
   CardHeader,
   Chip,
+  CircularProgress,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Tooltip,
   useDisclosure,
 } from "@heroui/react";
-import { useRef, useState } from "react";
-import { IoIosAlarm, IoIosCheckbox } from "react-icons/io";
+import { useParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { IoIosAlarm } from "react-icons/io";
 import { IoColorPalette } from "react-icons/io5";
 
-const Task = () => {
+const Tasks = () => {
+  const { user } = useUser();
+  useAuth(user);
+  const { id } = useParams<{ id: string }>();
+  const [tasks, setTasks] = useState<Task | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (!id) return;
+
+    const fetchTask = async () => {
+      try {
+        const res = await fetch(`http://localhost:8080/api/task/${id}`, {
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch task");
+        }
+
+        const data: Task = await res.json();
+        setTasks(data);
+      } catch (err) {
+        console.error("Error fetching task", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTask();
+
+    const interval = setInterval(fetchTask, 3000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [id]);
+
   const {
     isOpen: isThemeOpen,
     onOpen: onOpenTheme,
     onOpenChange: onThemeOpenChange,
   } = useDisclosure();
-
   const {
     isOpen: isReminderOpen,
     onOpen: onOpenReminder,
     onOpenChange: onReminderOpenChange,
   } = useDisclosure();
-  const [paragraphs, setParagraphs] = useState<string[]>([
-    "Buy milk, eggs, and fresh vegetables for the week. Don’t forget to grab bread for breakfasts, rice for dinners, and some fruits for snacks. Check if cooking oil, sugar, and coffee need restocking. Stick to the budget but keep an eye out for discounts and weekly deals.",
-  ]);
 
+  const [paragraphs, setParagraphs] = useState<string[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const editableRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    if (tasks?.description) {
+      setParagraphs(tasks.description.split("\n"));
+    }
+  }, [tasks]);
 
   const focusToEnd = (element: HTMLDivElement) => {
     const range = document.createRange();
@@ -41,6 +92,26 @@ const Task = () => {
     range.collapse(false);
     sel?.removeAllRanges();
     sel?.addRange(range);
+  };
+
+  const updateTask = async (updatedFields: Partial<Task>) => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedFields),
+      });
+
+      if (!res.ok) throw new Error("Failed to update task");
+
+      const updatedTask: Task = await res.json();
+      setTasks(updatedTask);
+    } catch (err) {
+      console.error("Error updating task:", err);
+    }
   };
 
   const handleKeyDown = (
@@ -58,55 +129,170 @@ const Task = () => {
     }
   };
 
-  const handleSave = (): void => {
-    if (editingIndex !== null) {
-      const div = editableRefs.current[editingIndex];
-      if (div) {
-        const newParagraphs = [...paragraphs];
-        newParagraphs[editingIndex] = div.textContent || "";
-        setParagraphs(newParagraphs);
-      }
-      setEditingIndex(null);
+  const handleSave = () => {
+    const updates: Partial<Task> = {};
+
+    const titleDiv = editableRefs.current[-1];
+    if (titleDiv) {
+      updates.title = titleDiv.textContent || "";
     }
+
+    const newParagraphs = editableRefs.current
+      .map((div) => div?.textContent || "")
+      .filter((text) => text.trim() !== "");
+
+    setParagraphs(newParagraphs);
+    updates.description = newParagraphs.join("\n\n");
+    updateTask(updates);
+
+    setEditingIndex(null);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <CircularProgress aria-label="Loading tasks..." color="primary" />
+      </div>
+    );
+  }
+
+  if (!tasks) return <p>Task not found</p>;
 
   return (
     <div className="mt-14">
-      <Card className="p-6">
-        <CardHeader>
-          <div>
-            <Chip size="sm" color="default" className="mb-2">
-              Pending
-            </Chip>
-            <h1 className="text-2xl font-bold text-[#1A4A96]">
-              Grocery Shopping
-            </h1>
-            <small>Monday, September 01, 2025 | 300 characters</small>
-          </div>
-        </CardHeader>
+      <Card
+        className="p-6"
+        style={{ backgroundColor: tasks.color || "#FFFFFF" }}
+      >
+        {paragraphs.map((text, i) => (
+          <div key={i}>
+            <CardHeader>
+              <div className="flex">
+                <div>
+                  {tasks.status === "Completed" ? (
+                    <Chip
+                      size="sm"
+                      color="success"
+                      className="mb-2 cursor-default"
+                    >
+                      {tasks.status}
+                    </Chip>
+                  ) : (
+                    <Dropdown size="sm" className="mb-2 items-center">
+                      <DropdownTrigger>
+                        <Chip
+                          size="sm"
+                          color={
+                            tasks.status === "In-progress"
+                              ? "primary"
+                              : "default"
+                          }
+                          className="mb-2 cursor-pointer"
+                        >
+                          {tasks.status}
+                        </Chip>
+                      </DropdownTrigger>
 
-        <CardBody>
-          {paragraphs.map((text, i) => (
-            <div key={i} className="relative">
-              <div
-                ref={(el) => {
-                  editableRefs.current[i] = el;
-                }}
-                contentEditable
-                suppressContentEditableWarning
-                className="mt-2 text-base text-gray-700 outline-none cursor-text"
-                onFocus={(e) => {
-                  setEditingIndex(i);
-                  focusToEnd(e.currentTarget);
-                }}
-                onKeyDown={(e) => handleKeyDown(e, i)}
-              >
-                {text}
+                      <DropdownMenu
+                        aria-label="Task Status"
+                        onAction={(key) =>
+                          updateTask({ status: key as Task["status"] })
+                        }
+                      >
+                        {tasks.status === "Pending"
+                          ? [
+                              <DropdownItem key="In-progress">
+                                <Chip
+                                  size="sm"
+                                  color="primary"
+                                  className="mb-2"
+                                >
+                                  In-progress
+                                </Chip>
+                              </DropdownItem>,
+                              <DropdownItem key="Completed">
+                                <Chip
+                                  size="sm"
+                                  color="success"
+                                  className="mb-2"
+                                >
+                                  Completed
+                                </Chip>
+                              </DropdownItem>,
+                            ]
+                          : tasks.status === "In-progress"
+                            ? [
+                                <DropdownItem key="Completed">
+                                  <Chip
+                                    size="sm"
+                                    color="success"
+                                    className="mb-2"
+                                  >
+                                    Completed
+                                  </Chip>
+                                </DropdownItem>,
+                              ]
+                            : null}
+                      </DropdownMenu>
+                    </Dropdown>
+                  )}
+
+                  <h1
+                    ref={(el) => {
+                      if (el && editingIndex === -1) {
+                        editableRefs.current[-1] = el;
+                      }
+                    }}
+                    contentEditable
+                    suppressContentEditableWarning
+                    className="text-2xl font-bold text-[#1A4A96] cursor-text outline-none"
+                    onFocus={(e) => {
+                      setEditingIndex(-1);
+                      focusToEnd(e.currentTarget);
+                    }}
+                    onKeyDown={(e) => handleKeyDown(e, -1)}
+                  >
+                    {tasks.title}
+                  </h1>
+                  <small>
+                    {new Intl.DateTimeFormat("en-US", {
+                      weekday: "long",
+                      month: "long",
+                      day: "2-digit",
+                      year: "numeric",
+                    }).format(new Date(tasks.createdAt ?? ""))}
+                    {" | "}
+                    {paragraphs.join(" ").length} characters
+                  </small>
+                </div>
+                <div className="justify-end">
+                  <p>Deadline: {tasks.deadline}</p>
+                  <p>Deadline: {tasks.reminderAt}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </CardBody>
+            </CardHeader>
 
+            <CardBody>
+              <div className="relative">
+                <div
+                  ref={(el) => {
+                    editableRefs.current[i] = el;
+                  }}
+                  contentEditable
+                  suppressContentEditableWarning
+                  className="mt-2 text-base text-gray-700 outline-none cursor-text"
+                  onFocus={(e) => {
+                    setEditingIndex(i);
+                    focusToEnd(e.currentTarget);
+                  }}
+                  onKeyDown={(e) => handleKeyDown(e, i)}
+                >
+                  {text}
+                </div>
+              </div>
+            </CardBody>
+          </div>
+        ))}
         {editingIndex !== null && (
           <CardFooter>
             <div className="flex items-center justify-between w-full">
@@ -125,12 +311,6 @@ const Task = () => {
                     onClick={onOpenReminder}
                   />
                 </Tooltip>
-                <Tooltip content="Add checkbox" showArrow={true}>
-                  <IoIosCheckbox
-                    size={30}
-                    className="text-[#2D68C4] font-bold cursor-pointer"
-                  />
-                </Tooltip>
               </div>
 
               <Button color="primary" onPress={handleSave}>
@@ -141,13 +321,18 @@ const Task = () => {
         )}
       </Card>
 
-      <ThemeModal isOpen={isThemeOpen} onOpenChange={onThemeOpenChange} />
+      <ThemeModal
+        isOpen={isThemeOpen}
+        onOpenChange={onThemeOpenChange}
+        id={id}
+      />
       <CalendarModal
         isOpen={isReminderOpen}
         onOpenChange={onReminderOpenChange}
+        id={id}
       />
     </div>
   );
 };
 
-export default Task;
+export default Tasks;

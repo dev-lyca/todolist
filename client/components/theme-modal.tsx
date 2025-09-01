@@ -13,9 +13,15 @@ import { MdCheck, MdRectangle } from "react-icons/md";
 interface ThemeModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  id?: string;
 }
 
-const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onOpenChange }) => {
+const ThemeModal: React.FC<ThemeModalProps> = ({
+  isOpen,
+  onOpenChange,
+  id,
+}) => {
+  console.log("This is theme modal", id);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const colorGroups = [
     {
@@ -70,6 +76,28 @@ const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onOpenChange }) => {
     },
   ];
 
+  const handleSave = async () => {
+    if (!selectedColor) return;
+
+    try {
+      const res = await fetch(`http://localhost:8080/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ color: selectedColor }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update theme");
+
+      const data = await res.json();
+      console.log("Theme updated:", data);
+
+      onOpenChange(false);
+    } catch (err) {
+      console.error("Error updating theme:", err);
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -93,10 +121,6 @@ const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onOpenChange }) => {
         initial: { y: 100, opacity: 0 },
         animate: { y: 0, opacity: 1 },
         exit: { y: 100, opacity: 0 },
-      }}
-      classNames={{
-        base: "m-0 fixed bottom-0 w-full rounded-t-2xl shadow-lg",
-        wrapper: "items-end justify-center",
       }}
     >
       <ModalContent>
@@ -140,7 +164,11 @@ const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onOpenChange }) => {
               <Button color="danger" variant="light" onPress={onClose}>
                 Close
               </Button>
-              <Button color="primary" onPress={onClose}>
+              <Button
+                color="primary"
+                onPress={handleSave}
+                disabled={!selectedColor}
+              >
                 Select
               </Button>
             </ModalFooter>

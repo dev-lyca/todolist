@@ -14,13 +14,38 @@ import React, { useState } from "react";
 interface CalendarModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  id?: string;
 }
 
 const CalendarModal: React.FC<CalendarModalProps> = ({
   isOpen,
   onOpenChange,
+  id,
 }) => {
+  console.log(id);
   const [value, setValue] = useState(parseDate("2024-03-07") as any);
+
+  const handleSave = async () => {
+    if (!value) return;
+
+    try {
+      const res = await fetch(`http://localhost:8080/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ reminderAt: value.toISOString() }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update theme");
+
+      const data = await res.json();
+      console.log("Theme updated:", data);
+
+      onOpenChange(false);
+    } catch (err) {
+      console.error("Error updating theme:", err);
+    }
+  };
 
   return (
     <Modal
@@ -73,7 +98,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
               <Button
                 color="primary"
                 onPress={() => {
-                  console.log("Selected date:", value.toString());
+                  handleSave();
                   onClose();
                 }}
               >

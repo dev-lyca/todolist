@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export const TaskValidationSchema = {
   user: {
-    in: ["body"], // check if the request is in the body
+    in: ["body"],
     notEmpty: {
       errorMessage: "User cannot be empty",
     },
@@ -44,7 +44,7 @@ export const TaskValidationSchema = {
     in: ["body"],
     optional: true,
     isIn: {
-      options: [["pending", "in-progress", "completed"]],
+      options: [["Pending", "In-progress", "Completed"]],
       errorMessage: "Status must be pending, in-progress, or completed",
     },
   },
@@ -53,7 +53,7 @@ export const TaskValidationSchema = {
     in: ["body"],
     optional: true,
     isIn: {
-      options: [["low", "moderate", "urgent"]],
+      options: [["Low", "Moderate", "Urgent"]],
       errorMessage: "Priority must be low, moderate, or urgent",
     },
   },
@@ -62,7 +62,7 @@ export const TaskValidationSchema = {
     in: ["body"],
     optional: true,
     isIn: {
-      options: [["personal", "school", "work"]],
+      options: [["Personal", "School", "Work"]],
       errorMessage: "Category must be personal, school, or work",
     },
   },
@@ -100,5 +100,14 @@ export const TaskValidationSchema = {
         return true;
       },
     },
+  },
+  color: {
+    in: ["body"],
+    optional: true,
+    isString: true,
+    matches: {
+      options: /^#([0-9A-Fa-f]{3}){1,2}$/,
+    },
+    errorMessage: "Color must be a valid hex code",
   },
 };
