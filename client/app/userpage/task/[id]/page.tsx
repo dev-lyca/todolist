@@ -1,8 +1,6 @@
 "use client";
 import CalendarModal from "@/components/calendar-modal";
 import ThemeModal from "@/components/theme-modal";
-import { useUser } from "@/context/userContext";
-import useAuth from "@/hooks/useAuth";
 import { Task } from "@/types";
 import {
   Button,
@@ -21,12 +19,13 @@ import {
 } from "@heroui/react";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { FaRegCalendarAlt } from "react-icons/fa";
 import { IoIosAlarm } from "react-icons/io";
 import { IoColorPalette } from "react-icons/io5";
 
 const Tasks = () => {
-  const { user } = useUser();
-  useAuth(user);
+  // const { user } = useUser();
+  // useAuth(user);
   const { id } = useParams<{ id: string }>();
   const [tasks, setTasks] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
@@ -167,7 +166,7 @@ const Tasks = () => {
         {paragraphs.map((text, i) => (
           <div key={i}>
             <CardHeader>
-              <div className="flex">
+              <div className="flex justify-between items-start w-full">
                 <div>
                   {tasks.status === "Completed" ? (
                     <Chip
@@ -265,9 +264,36 @@ const Tasks = () => {
                     {paragraphs.join(" ").length} characters
                   </small>
                 </div>
-                <div className="justify-end">
-                  <p>Deadline: {tasks.deadline}</p>
-                  <p>Deadline: {tasks.reminderAt}</p>
+
+                <div className="flex gap-4 text-right text-xs items-center">
+                  <div className="flex items-center gap-1">
+                    <FaRegCalendarAlt className="text-gray-500" size={16} />
+                    <span>
+                      {tasks.deadline
+                        ? new Date(tasks.deadline).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : "No deadline"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1">
+                    <IoIosAlarm className="text-gray-500" size={16} />
+                    <span>
+                      {tasks.reminderAt
+                        ? new Date(tasks.reminderAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            }
+                          )
+                        : "No reminder"}
+                    </span>
+                  </div>
                 </div>
               </div>
             </CardHeader>

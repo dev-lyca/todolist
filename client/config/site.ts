@@ -18,8 +18,8 @@ export const siteConfig = {
       href: "/mytasks",
     },
     {
-      label: "Categories",
-      href: "/categories",
+      label: "Calendar",
+      href: "/calendar",
     },
     {
       label: "Logout",
@@ -38,8 +38,8 @@ export const siteConfig = {
       icon: MdOutlineTask,
     },
     {
-      label: "Task Categories",
-      href: "/userpage/categories",
+      label: "Calendar",
+      href: "/userpage/calendar",
       icon: MdFormatListBulleted,
     },
   ],

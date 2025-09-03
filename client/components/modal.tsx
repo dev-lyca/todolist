@@ -69,7 +69,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
       }
 
       const createdTask = await response.json();
-      console.log("Task created:", createdTask);
       addToast({
         title: "Task Created",
         description: "Your task was added successfully.",
@@ -122,17 +121,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
                   className="mb-4"
                 />
               </div>
-              {/* <Select
-                label="Status"
-                className="mb-4"
-                selectedKeys={[status]}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <SelectItem key="pending">Pending</SelectItem>
-                <SelectItem key="in-progress">In Progress</SelectItem>
-                <SelectItem key="completed">Completed</SelectItem>
-              </Select> */}
-
               <div className="flex justify-between gap-2">
                 <Select
                   label="Priority"
@@ -145,7 +133,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
                   <SelectItem key="Urgent">Urgent</SelectItem>
                 </Select>
 
-                {/* Category (optional) */}
                 <Select
                   label="Category"
                   className="mb-4"
@@ -159,7 +146,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
               </div>
 
               <div className="flex justify-between gap-2">
-                {/* Deadline (optional, must be future date) */}
                 <Input
                   label="Deadline"
                   placeholder="Select deadline"
@@ -169,7 +155,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
                   className="mb-4"
                 />
 
-                {/* ReminderAt (optional, must be before deadline if set) */}
                 <Input
                   label="Reminder"
                   placeholder="Select reminder date"

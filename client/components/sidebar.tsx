@@ -1,17 +1,22 @@
 "use client";
 import { siteConfig } from "@/config/site";
+import { Image } from "@heroui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaTasks } from "react-icons/fa";
 
 export default function Sidebar() {
   const pathname = usePathname();
   return (
     <div className="h-screen bg-[#fdfaf6] text-[#4a3f35] overflow-hidden">
-      <aside className="fixed top-0 left-0 h-screen w-64 bg-[#000000] p-6 shadow-lg overflow-hidden">
+      <aside className="fixed top-0 left-0 h-screen w-64 bg-[#1a1717] p-6 shadow-lg overflow-hidden">
         <div className="flex items-center gap-2 mb-4">
-          <FaTasks className="text-3xl text-[#ffffff]" />
-          <h1 className="text-3xl font-bold text-[#ffffff]">ToDo List</h1>
+          <Image
+            src="/images/logo.png"
+            alt="Logo"
+            width={200}
+            height={100}
+            className="object-contain"
+          />
         </div>
 
         <nav className="space-y-4 text-white">

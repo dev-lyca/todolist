@@ -2,6 +2,7 @@
 import {
   Button,
   Calendar,
+  DateValue,
   Modal,
   ModalBody,
   ModalContent,
@@ -9,7 +10,7 @@ import {
   ModalHeader,
 } from "@heroui/react";
 import { parseDate } from "@internationalized/date";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface CalendarModalProps {
   isOpen: boolean;
@@ -23,27 +24,72 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
   id,
 }) => {
   console.log(id);
-  const [value, setValue] = useState(parseDate("2024-03-07") as any);
+  const [value, setValue] = useState<DateValue | null>(null);
+  const [loading, isLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchTask = async () => {
+      if (!id) return;
+
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/task/${id}`,
+          { credentials: "include" }
+        );
+
+        if (!res.ok) throw new Error("Failed to fetch task");
+
+        const task = await res.json();
+
+        if (task.reminderAt) {
+          // Get YYYY-MM-DD string
+          const dateOnly = new Date(task.reminderAt)
+            .toISOString()
+            .split("T")[0];
+          // Parse into CalendarDate
+          setValue(parseDate(dateOnly));
+        } else {
+          // Default to today
+          const today = new Date().toISOString().split("T")[0];
+          setValue(parseDate(today));
+        }
+      } catch (err) {
+        console.error("Error fetching task:", err);
+      }
+    };
+
+    if (isOpen) {
+      fetchTask();
+    }
+  }, [id, isOpen]);
 
   const handleSave = async () => {
     if (!value) return;
-
+    isLoading(true);
     try {
-      const res = await fetch(`http://localhost:8080/api/tasks/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ reminderAt: value.toISOString() }),
-      });
+      const jsDate = new Date(value.year, value.month - 1, value.day);
+      const isoDate = jsDate.toISOString();
 
-      if (!res.ok) throw new Error("Failed to update theme");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ reminderAt: isoDate }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to update reminder");
 
       const data = await res.json();
-      console.log("Theme updated:", data);
+      console.log("Reminder updated:", data);
 
       onOpenChange(false);
     } catch (err) {
-      console.error("Error updating theme:", err);
+      console.error("Error updating reminder:", err);
+    } finally {
+      isLoading(false);
     }
   };
 
@@ -85,8 +131,8 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
             <ModalBody className="space-y-4 items-center">
               <Calendar
                 aria-label="Date (Controlled)"
-                value={value as any}
-                onChange={(v: any) => setValue(v)}
+                value={value ?? undefined}
+                onChange={setValue}
                 visibleMonths={2}
               />
             </ModalBody>
@@ -95,13 +141,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
               <Button color="danger" variant="light" onPress={onClose}>
                 Close
               </Button>
-              <Button
-                color="primary"
-                onPress={() => {
-                  handleSave();
-                  onClose();
-                }}
-              >
+              <Button color="primary" onPress={handleSave} isLoading={loading}>
                 Select
               </Button>
             </ModalFooter>

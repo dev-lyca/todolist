@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, Card } from "@heroui/react";
-import { FaGoogle, FaTasks } from "react-icons/fa";
+import { Button, Card, Image } from "@heroui/react";
+import { FaGoogle } from "react-icons/fa";
 
 export default function LoginPage() {
   const handleGoogleLogin = () => {
@@ -13,8 +13,13 @@ export default function LoginPage() {
       <Card className="w-full max-w-lg p-8 shadow-xl rounded-2xl bg-white">
         <div className="flex flex-col items-center text-center">
           <div className="flex items-center gap-2 mb-4">
-            <FaTasks className="text-3xl text-[#124170]" />
-            <h1 className="text-3xl font-bold text-[#124170]">ToDo List</h1>
+            <Image
+              src="/images/logo.png"
+              alt="Logo"
+              width={200}
+              height={100}
+              className="object-contain"
+            />
           </div>
 
           <p className="text-gray-600 text-sm mb-8">
