@@ -40,6 +40,10 @@ app.use(passport.session());
 
 app.use(routes);
 
+app.get("/", (req, res) => {
+  res.send("TrackTask backend is running ✅");
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🚀 Server started on port ${PORT}`);
