@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { checkSchema, matchedData, validationResult } from "express-validator";
+import mongoose from "mongoose";
 import { Task } from "../mongoose/schemas/tasks.mjs";
 import { authMiddleware } from "../utils/middleware.mjs";
 import { TaskValidationSchema } from "../utils/validationSchema.mjs";
 
 const router = Router();
 
-router.get("/api/all-tasks", (req, res) => {
+router.get("/api/all-tasks", authMiddleware, (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: "User not logged in" });
   }
@@ -20,6 +21,7 @@ router.get("/api/all-tasks", (req, res) => {
 
 router.post(
   "/api/create-tasks",
+  authMiddleware,
   checkSchema(TaskValidationSchema),
   async (req, res) => {
     const result = validationResult(req);
@@ -40,7 +42,7 @@ router.post(
   }
 );
 
-router.get("/api/task/:id", async (req, res) => {
+router.get("/api/task/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     console.log("Fetching task with ID:", id);
@@ -84,7 +86,7 @@ router.patch("/api/tasks/:id", authMiddleware, async (req, res) => {
     if (!isValidOperation)
       return res.status(400).json({ error: "Invalid updates!" });
 
-    const task = await Task.findOne({ _id: id, user: userId }); // ✅ only update your tasks
+    const task = await Task.findOne({ _id: id, user: userId });
     if (!task) return res.status(404).json({ error: "Task not found" });
 
     updates.forEach((update) => {
@@ -99,22 +101,136 @@ router.patch("/api/tasks/:id", authMiddleware, async (req, res) => {
   }
 });
 
-router.delete("/api/tasks/:id", async (req, res) => {
+router.delete("/api/delete/task/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user._id;
+    console.log("this is the userId", userId);
+
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
     const deletedTask = await Task.findOneAndDelete({ _id: id, user: userId });
 
     if (!deletedTask) {
       return res.status(404).json({ error: "Task not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Task deleted successfully", task: deletedTask });
+    res.status(200).json({
+      message: "Task deleted successfully",
+      task: deletedTask,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Delete task error:", error.message);
     res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+///delete multiple
+router.delete("/api/delete/tasks", async (req, res) => {
+  try {
+    const { ids } = req.body; // expect array of ids
+    const userId = req.user._id;
+
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: "No task ids provided" });
+    }
+
+    // validate all ids
+    const invalidId = ids.find((id) => !mongoose.Types.ObjectId.isValid(id));
+    if (invalidId) {
+      return res.status(400).json({ error: `Invalid task id: ${invalidId}` });
+    }
+
+    const result = await Task.deleteMany({ _id: { $in: ids }, user: userId });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "No tasks deleted" });
+    }
+
+    res.status(200).json({
+      message: `${result.deletedCount} task(s) deleted successfully`,
+    });
+  } catch (error) {
+    console.error("Delete multiple tasks error:", error.message);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+//fetch tasks depends on Pending status and createdAt === date today
+router.all("/api/pending", authMiddleware, async (req, res) => {
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const tasks = await Task.find({
+      status: "Pending",
+      createdAt: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    res.json(tasks);
+  } catch (err) {
+    console.error("Error fetching pending tasks:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.all("/api/completed", authMiddleware, async (req, res) => {
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const tasks = await Task.find({
+      status: "Completed",
+      createdAt: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    res.json(tasks);
+  } catch (err) {
+    console.error("Error fetching completed tasks:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/api/count", authMiddleware, async (req, res) => {
+  try {
+    const result = {
+      completed: 0,
+      pending: 0,
+      "in-progress": 0,
+    };
+
+    const tasks = await Task.find({ user: req.user._id });
+
+    console.log(tasks);
+    tasks.forEach((task) => {
+      const status = task.status?.toLowerCase(); // normalize
+      if (status === "completed") result.completed += 1;
+      else if (status === "pending") result.pending += 1;
+      else if (status === "in-progress") result["in-progress"] += 1;
+    });
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
