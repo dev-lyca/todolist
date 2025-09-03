@@ -23,8 +23,6 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import { TbMoodEmptyFilled } from "react-icons/tb";
 
 const MyTasks = () => {
-  // const { user } = useUser();
-  // useAuth(user);
   const [selectedTasks, setSelectedTasks] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);

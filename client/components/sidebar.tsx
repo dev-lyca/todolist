@@ -9,12 +9,12 @@ export default function Sidebar() {
   return (
     <div className="h-screen bg-[#fdfaf6] text-[#4a3f35] overflow-hidden">
       <aside className="fixed top-0 left-0 h-screen w-64 bg-[#1a1717] p-6 shadow-lg overflow-hidden">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-6">
           <Image
             src="/images/logo.png"
             alt="Logo"
-            width={200}
-            height={100}
+            width={230}
+            height={150}
             className="object-contain"
           />
         </div>

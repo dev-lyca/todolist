@@ -11,19 +11,15 @@ export const siteConfig = {
   navMenuItems: [
     {
       label: "Dashboard",
-      href: "/dashboard",
+      href: "/userpage/dashboard",
     },
     {
       label: "My Tasks",
-      href: "/mytasks",
+      href: "/userpage/mytasks",
     },
     {
       label: "Calendar",
-      href: "/calendar",
-    },
-    {
-      label: "Logout",
-      href: "/logout",
+      href: "/userpage/calendar",
     },
   ],
  sideBarItems: [

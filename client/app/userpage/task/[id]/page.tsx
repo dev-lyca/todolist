@@ -24,8 +24,6 @@ import { IoIosAlarm } from "react-icons/io";
 import { IoColorPalette } from "react-icons/io5";
 
 const Tasks = () => {
-  // const { user } = useUser();
-  // useAuth(user);
   const { id } = useParams<{ id: string }>();
   const [tasks, setTasks] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,9 +34,12 @@ const Tasks = () => {
 
     const fetchTask = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/task/${id}`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/task/${id}`,
+          {
+            credentials: "include",
+          }
+        );
 
         if (!res.ok) {
           throw new Error("Failed to fetch task");
@@ -95,14 +96,17 @@ const Tasks = () => {
 
   const updateTask = async (updatedFields: Partial<Task>) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/tasks/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(updatedFields),
-      });
+      const res = await fetch(
+        `$${process.env.NEXT_PUBLIC_API_URL}}/tasks/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(updatedFields),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to update task");
 

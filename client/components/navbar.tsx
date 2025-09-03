@@ -17,7 +17,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@heroui/navbar";
-import { Avatar } from "@heroui/react";
+import { Avatar, Button, Image, NavbarBrand } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { MdLogout } from "react-icons/md";
 
@@ -25,36 +25,59 @@ export const Navbar = () => {
   const router = useRouter();
   const { user } = useUser();
 
-  // const handleLogout = async () => {
-  //   try {
-  //     const res = await fetch("http://localhost:8080/api/auth/logout", {
-  //       method: "POST",
-  //       credentials: "include",
-  //     });
+  const handleLogout = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
-  //     if (res.ok) {
-  //       router.replace("/login");
-  //     }
-  //   } catch (err) {
-  //     console.error("Logout failed", err);
-  //   }
-  // };
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data.message);
+
+        router.replace("/login");
+      } else {
+        const errorData = await res.json();
+        console.error("Logout failed:", errorData.message);
+      }
+    } catch (err) {
+      console.error("Logout request error:", err);
+    }
+  };
 
   return (
     <HeroUINavbar
       maxWidth="xl"
       position="sticky"
-      className="w-full top-0 z-50 shadow-md"
+      className="w-full top-0 z-50 shadow-md lg:bg-white bg-black"
     >
+      <NavbarBrand>
+        <Image
+          src="/images/logo.png"
+          alt="Logo"
+          width={100}
+          height={200}
+          className="object-contain"
+        />
+      </NavbarBrand>
+
       <NavbarContent justify="end" className="hidden lg:flex">
         <NavbarItem>
           <Dropdown>
             <DropdownTrigger className="flex items-center gap-1">
-              <div>{user?.photo && <Avatar src={user.photo} />}</div>
+              <div>
+                {user?.photo && (
+                  <Avatar src={user.photo} className="cursor-pointer" />
+                )}
+              </div>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
               <DropdownItem key="logout" className="px-2 py-1 text-danger">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" onClick={handleLogout}>
                   <MdLogout className="text-lg" />
                   <span>Logout</span>
                 </div>
@@ -64,8 +87,8 @@ export const Navbar = () => {
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent className="lg:hidden basis-1 pl-4" justify="end">
-        <NavbarMenuToggle />
+      <NavbarContent justify="end" className="lg:hidden">
+        <NavbarMenuToggle className="text-white" />
       </NavbarContent>
 
       <NavbarMenu>
@@ -87,6 +110,16 @@ export const Navbar = () => {
               </Link>
             </NavbarMenuItem>
           ))}
+
+          <NavbarMenuItem>
+            <Button
+              onPress={handleLogout}
+              className="flex items-center gap-2 text-danger px-2 py-1 w-full"
+            >
+              <MdLogout className="text-lg" />
+              <span>Logout</span>
+            </Button>
+          </NavbarMenuItem>
         </div>
       </NavbarMenu>
     </HeroUINavbar>

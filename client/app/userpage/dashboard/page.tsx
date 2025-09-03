@@ -28,8 +28,6 @@ interface TaskCounts {
 
 const Dashboard = () => {
   const { user } = useUser();
-  // useAuth(user);
-
   const firstName = user?.displayName?.split(" ")[0];
 
   const [pending, setPending] = useState<Task[] | null>(null);
@@ -113,12 +111,12 @@ const Dashboard = () => {
   if (completed === null) return <p>No data</p>;
 
   return (
-    <section className="mt-14">
+    <section className="mt-14 overflow-x-hidden">
       <h1 className="text-2xl mb-2 text-[#000000f6] font-bold">
         Welcome back, {firstName}!
       </h1>
       <div className="flex justify-center items-center mt-10 px-4">
-        <Card className="w-full sm:w-96 md:w-1/2 lg:w-1/3 p-4 shadow-lg rounded-lg">
+        <Card className="w-full p-4 shadow-lg rounded-lg">
           <CardHeader className="flex items-center gap-3">
             <IoBarChart className="text-xl text-[#000000]" />
             <div className="flex flex-col">
@@ -171,12 +169,11 @@ const Dashboard = () => {
           </CardFooter>
         </Card>
       </div>
-      <div className="flex items-center justify-center py-8 md:py-7">
+      <div className="flex items-center justify-center py-8 md:py-7 px-4">
         <div
           className="grid grid-cols-1 md:grid-cols-2 gap-4 
       w-full max-w-7xl"
         >
-          {/* Pending */}
           <Card className="w-full">
             <CardHeader className="flex-col items-start">
               <div className="flex items-center gap-1 pb-5 text-medium text-[#000000] font-bold">
