@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import MongoStore from "connect-mongo";
-import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import session from "express-session";
@@ -21,7 +20,7 @@ mongoose
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
-app.use(cookieParser(process.env.COOKIE_SECRET || "cookie_secret"));
+// app.use(cookieParser(process.env.COOKIE_SECRET || "cookie_secret"));
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "session_secret",
@@ -40,10 +39,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(routes);
-
-app.get("/api/home", (req, res) => {
-  res.json({ msg: "Hello world" });
-});
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

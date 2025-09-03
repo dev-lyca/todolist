@@ -52,7 +52,7 @@ router.post("/api/auth/logout", (req, res) => {
       if (err)
         return res.status(500).json({ message: "Session destroy failed" });
 
-      res.clearCookie("session_secret");
+      res.clearCookie("connect.sid");
       res.status(200).json({ message: "Logged out successfully" });
     });
   });
