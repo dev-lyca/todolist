@@ -6,8 +6,8 @@ import {
 } from "react-icons/md";
 
 export const siteConfig = {
-  name: "To-Do List",
-  description: "Be organized using this website",
+  name: "TrackTask",
+  description: "Stay organized and on top of your tasks with TrackTask.",
   navMenuItems: [
     {
       label: "Dashboard",

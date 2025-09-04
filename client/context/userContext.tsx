@@ -21,9 +21,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/auth/user", {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/user`,
+          {
+            credentials: "include",
+          }
+        );
         if (res.ok) {
           const data: GoogleUser = await res.json();
           setUser(data);

@@ -11,19 +11,20 @@ import {
 import { Link } from "@heroui/link";
 import {
   Navbar as HeroUINavbar,
+  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@heroui/navbar";
-import { Avatar, Button, Image, NavbarBrand } from "@heroui/react";
+import { Avatar, Button, Image } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { MdLogout } from "react-icons/md";
 
 export const Navbar = () => {
-  const router = useRouter();
   const { user } = useUser();
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
