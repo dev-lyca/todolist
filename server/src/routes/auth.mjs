@@ -1,4 +1,5 @@
 import { Router } from "express";
+import jwt from "jsonwebtoken";
 import passport from "passport";
 
 const router = Router();
@@ -10,25 +11,35 @@ router.get(
 );
 
 // handling the callback after google has authenticated the user
+
 router.get(
   "/api/auth/google/redirect",
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
-    req.session.user = {
+    // Build payload for JWT
+    const payload = {
       _id: req.user._id,
       googleId: req.user.googleId,
       displayName: req.user.displayName,
       email: req.user.email,
       photo: req.user.photo,
-      createdAt: req.user.createdAt,
-      updatedAt: req.user.updatedAt,
     };
 
-    req.session.save((err) => {
-      if (err) console.error("Session save error:", err);
-
-      res.redirect("https://tracktask-nggt.onrender.com/userpage/dashboard");
+    // Sign token
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1d", // adjust as needed
     });
+
+    // Send token as httpOnly cookie
+    res.cookie("token", token, {
+      httpOnly: true, // cannot be accessed by JS
+      secure: true, // required for HTTPS
+      sameSite: "strict", // CSRF protection
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    // Redirect to frontend dashboard
+    res.redirect("https://tracktask-nggt.onrender.com/userpage/dashboard");
   }
 );
 
