@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(
   cors({ origin: "https://tracktask-nggt.onrender.com", credentials: true })
 );
-  
+
 app.set("trust proxy", 1);
 
 app.use(
@@ -34,9 +34,8 @@ app.use(
       mongoUrl: process.env.MONGO_URI,
     }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 3,
+      secure: true,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
       sameSite: "none",
     },
   })
