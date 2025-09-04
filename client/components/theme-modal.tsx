@@ -80,12 +80,15 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
     if (!selectedColor) return;
 
     try {
-      const res = await fetch(`/api/tasks/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ color: selectedColor }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/tasks/${id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ color: selectedColor }),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to update theme");
 

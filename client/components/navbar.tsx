@@ -29,7 +29,7 @@ export const Navbar = () => {
   const handleLogout = async () => {
     try {
       const res = await fetch(
-        `/api/auth/logout`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/logout`,
         {
           method: "POST",
           credentials: "include",

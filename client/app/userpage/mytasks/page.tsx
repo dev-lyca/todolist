@@ -48,7 +48,7 @@ const MyTasks = () => {
     setLoading(true);
     const fetchTasks = async () => {
       try {
-        const res = await fetch(`/api/all-tasks`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/all-tasks`, {
           credentials: "include",
         });
 
@@ -91,7 +91,7 @@ const MyTasks = () => {
     setChecked(false);
 
     try {
-      const res = await fetch(`/api/delete/tasks`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/delete/tasks`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -34,7 +34,7 @@ const Tasks = () => {
 
     const fetchTask = async () => {
       try {
-        const res = await fetch(`/api/task/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/task/${id}`, {
           credentials: "include",
         });
 
@@ -93,7 +93,7 @@ const Tasks = () => {
 
   const updateTask = async (updatedFields: Partial<Task>) => {
     try {
-      const res = await fetch(`$/api}/tasks/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api}/tasks/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

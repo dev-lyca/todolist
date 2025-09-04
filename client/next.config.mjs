@@ -7,14 +7,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "https://todolist-pysz.onrender.com/api/:path*",
-      },
-    ];
-  },
 };
 
 export default nextConfig;

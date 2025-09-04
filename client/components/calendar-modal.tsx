@@ -32,7 +32,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
       if (!id) return;
 
       try {
-        const res = await fetch(`/api/task/${id}`, { credentials: "include" });
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/task/${id}`, { credentials: "include" });
 
         if (!res.ok) throw new Error("Failed to fetch task");
 
@@ -67,7 +67,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
       const jsDate = new Date(value.year, value.month - 1, value.day);
       const isoDate = jsDate.toISOString();
 
-      const res = await fetch(`/api/tasks/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/tasks/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
