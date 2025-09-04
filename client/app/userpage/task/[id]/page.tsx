@@ -164,7 +164,7 @@ const Tasks = () => {
   return (
     <div className="mt-14 sm:mt-12">
       <Card
-        className="p-6 max-h-3"
+        className="p-6 max-h-40 sm:max-h-60 md:max-h-80 lg:max-h-[32rem]"
         style={{ backgroundColor: tasks.color || "#FFFFFF" }}
       >
         {paragraphs.map((text, i) => (
