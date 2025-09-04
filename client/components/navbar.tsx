@@ -56,7 +56,7 @@ export const Navbar = () => {
       position="sticky"
       className="w-full top-0 z-50 shadow-md lg:bg-white bg-black"
     >
-      <NavbarBrand>
+      <NavbarBrand className="hidden sm:flex">
         <Image
           src="/images/logo.png"
           alt="Logo"
@@ -104,7 +104,7 @@ export const Navbar = () => {
                       ? "danger"
                       : "foreground"
                 }
-                href="#"
+                href={item.href}
                 size="lg"
               >
                 {item.label}

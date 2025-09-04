@@ -1,8 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 import {
-  MdFormatListBulleted,
+  MdCalendarMonth,
   MdOutlineDashboardCustomize,
-  MdOutlineTask,
+  MdOutlineTask
 } from "react-icons/md";
 
 export const siteConfig = {
@@ -36,7 +36,7 @@ export const siteConfig = {
     {
       label: "Calendar",
       href: "/userpage/calendar",
-      icon: MdFormatListBulleted,
+      icon: MdCalendarMonth,
     },
   ],
   links: {

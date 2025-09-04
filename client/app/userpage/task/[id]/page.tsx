@@ -162,9 +162,9 @@ const Tasks = () => {
   if (!tasks) return <p>Task not found</p>;
 
   return (
-    <div className="mt-14">
+    <div className="mt-14 sm:mt-12">
       <Card
-        className="p-6"
+        className="p-6 max-h-3"
         style={{ backgroundColor: tasks.color || "#FFFFFF" }}
       >
         {paragraphs.map((text, i) => (
