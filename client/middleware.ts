@@ -3,13 +3,24 @@ import { NextResponse } from "next/server";
 
 const protectedPrefixes = ["/userpage/dashboard", "/userpage/mytasks", "/userpage/task"];
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (protectedPrefixes.some((prefix) => pathname.startsWith(prefix))) {
-    const sessionCookie = req.cookies.get("connect.sid");
+    try {
+      const res = await fetch(`/api/auth/user`, {
+        method: "GET",
+        headers: {
+          cookie: req.headers.get("cookie") || "",
+        },
+      });
 
-    if (!sessionCookie) {
+      if (res.status !== 200) {
+        const loginUrl = new URL("/login", req.url);
+        return NextResponse.redirect(loginUrl);
+      }
+    } catch (err) {
+      console.error("Auth check failed:", err);
       const loginUrl = new URL("/login", req.url);
       return NextResponse.redirect(loginUrl);
     }
