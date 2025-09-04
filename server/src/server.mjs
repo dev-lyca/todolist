@@ -18,7 +18,6 @@ mongoose
   .catch((err) => console.error("DB Connection Error:", err));
 
 app.use(express.json());
-
 app.use(
   cors({ origin: "https://tracktask-nggt.onrender.com", credentials: true })
 );
@@ -34,8 +33,9 @@ app.use(
       mongoUrl: process.env.MONGO_URI,
     }),
     cookie: {
-      secure: true,
+      maxAge: 1000 * 60 * 60 * 3,
       httpOnly: true,
+      secure: true,
       sameSite: "none",
     },
   })

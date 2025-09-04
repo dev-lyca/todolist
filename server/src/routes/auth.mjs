@@ -1,5 +1,4 @@
 import { Router } from "express";
-import jwt from "jsonwebtoken";
 import passport from "passport";
 
 const router = Router();
@@ -11,44 +10,37 @@ router.get(
 );
 
 // handling the callback after google has authenticated the user
-
 router.get(
   "/api/auth/google/redirect",
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
-    // Build payload for JWT
-    const payload = {
+    req.session.user = {
       _id: req.user._id,
       googleId: req.user.googleId,
       displayName: req.user.displayName,
       email: req.user.email,
       photo: req.user.photo,
+      createdAt: req.user.createdAt,
+      updatedAt: req.user.updatedAt,
     };
 
-    // Sign token
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1d", // adjust as needed
-    });
+    req.session.save((err) => {
+      if (err) console.error("Session save error:", err);
 
-    // Send token as httpOnly cookie
-    res.cookie("token", token, {
-      httpOnly: true, // cannot be accessed by JS
-      secure: true, // required for HTTPS
-      sameSite: "strict", // CSRF protection
-      maxAge: 24 * 60 * 60 * 1000,
+      res.redirect(`${process.env.NEXTJS_URL}`);
     });
-
-    // Redirect to frontend dashboard
-    res.redirect("https://tracktask-nggt.onrender.com/userpage/dashboard");
   }
 );
 
 // checking if user is logged in and returning user info
 router.get("/api/auth/user", (req, res) => {
-  if (req.isAuthenticated() && req.user) {
-    res.json(req.user); // return the logged-in user info
+  console.log("Session:", req.session);
+  console.log("User:", req.user);
+
+  if (req.isAuthenticated()) {
+    return res.json(req.user);
   } else {
-    res.status(401).json({ error: "User not logged in" });
+    return res.status(401).json({ error: "User not logged in" });
   }
 });
 
