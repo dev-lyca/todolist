@@ -27,7 +27,9 @@ router.get(
     req.session.save((err) => {
       if (err) console.error("Session save error:", err);
 
-      res.sendStatus(200);
+      res.json({
+        redirectUrl: "https://tracktask-nggt.onrender.com/userpage/dashboard",
+      });
     });
   }
 );
