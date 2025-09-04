@@ -19,7 +19,12 @@ mongoose
 
 app.use(express.json());
 app.use(
-  cors({ origin: "https://tracktask-nggt.onrender.com", credentials: true })
+  cors({
+    origin: "https://tracktask-nggt.onrender.com",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
 );
 
 app.set("trust proxy", 1);
