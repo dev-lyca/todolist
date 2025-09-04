@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(
   cors({ origin: "https://tracktask-nggt.onrender.com", credentials: true })
 );
-
+  
 app.set("trust proxy", 1);
 
 app.use(

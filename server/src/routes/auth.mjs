@@ -27,7 +27,7 @@ router.get(
     req.session.save((err) => {
       if (err) console.error("Session save error:", err);
 
-      res.redirect(`${process.env.NEXTJS_URL}`);
+      res.sendStatus(200);
     });
   }
 );
