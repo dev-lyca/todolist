@@ -55,14 +55,17 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
         reminderAt,
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/create-tasks`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/create-tasks`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(newTask),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Failed: ${response.statusText}`);

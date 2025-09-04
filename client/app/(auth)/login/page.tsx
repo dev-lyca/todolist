@@ -4,8 +4,6 @@ import { Button, Card, Image } from "@heroui/react";
 import { FaGoogle } from "react-icons/fa";
 
 export default function LoginPage() {
-  // SERVER_URL=http://localhost:8080
-
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/google`;
   };
