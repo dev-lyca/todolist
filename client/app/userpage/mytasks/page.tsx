@@ -48,12 +48,9 @@ const MyTasks = () => {
     setLoading(true);
     const fetchTasks = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/all-tasks`,
-          {
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`/api/all-tasks`, {
+          credentials: "include",
+        });
 
         if (!res.ok) {
           throw new Error("Failed to fetch tasks");
@@ -94,15 +91,12 @@ const MyTasks = () => {
     setChecked(false);
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/delete/tasks`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ ids: selectedTasks }),
-        }
-      );
+      const res = await fetch(`/api/delete/tasks`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ ids: selectedTasks }),
+      });
 
       const data = await res.json();
 

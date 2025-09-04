@@ -49,7 +49,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/count`, {
+        const res = await fetch(`/api/count`, {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Failed to fetch counts");
@@ -67,7 +67,7 @@ const Dashboard = () => {
     const fetchPending = async () => {
       isLoading(true);
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pending`, {
+        const res = await fetch(`/api/pending`, {
           credentials: "include",
         });
 
@@ -85,12 +85,9 @@ const Dashboard = () => {
     const fetchCompleted = async () => {
       isCLoading(true);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/completed`,
-          {
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`/api/completed`, {
+          credentials: "include",
+        });
 
         if (!res.ok) throw new Error("Failed to fetch completed tasks");
         const data: Task[] = await res.json();

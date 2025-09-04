@@ -25,14 +25,11 @@ const DeleteModal: React.FC<DeleteModal> = ({ isOpen, onOpenChange, id }) => {
 
     isLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/delete/task/${id}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }
-      );
+      const res = await fetch(`/api/delete/task/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
 
       const data = await res.json();
 

@@ -34,12 +34,9 @@ const Tasks = () => {
 
     const fetchTask = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/task/${id}`,
-          {
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`/api/task/${id}`, {
+          credentials: "include",
+        });
 
         if (!res.ok) {
           throw new Error("Failed to fetch task");
@@ -96,17 +93,14 @@ const Tasks = () => {
 
   const updateTask = async (updatedFields: Partial<Task>) => {
     try {
-      const res = await fetch(
-        `$${process.env.NEXT_PUBLIC_API_URL}}/tasks/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(updatedFields),
-        }
-      );
+      const res = await fetch(`$/api}/tasks/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedFields),
+      });
 
       if (!res.ok) throw new Error("Failed to update task");
 
