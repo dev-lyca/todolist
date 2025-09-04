@@ -18,20 +18,26 @@ mongoose
   .catch((err) => console.error("DB Connection Error:", err));
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(
+  cors({ origin: "https://tracktask-five.vercel.app", credentials: true })
+);
 
-// app.use(cookieParser(process.env.COOKIE_SECRET || "cookie_secret"));
+app.set("trust proxy", 1);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "session_secret",
     saveUninitialized: false,
     resave: false,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24,
-    },
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
     }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 3,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+    },
   })
 );
 
