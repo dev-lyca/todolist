@@ -1,5 +1,6 @@
 "use client";
 
+import MobileFooterNav from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { UserProvider } from "@/context/userContext";
@@ -26,6 +27,8 @@ export default function UserLayout({
             {children}
           </main>
         </div>
+
+        <MobileFooterNav />
       </div>
     </UserProvider>
   );
