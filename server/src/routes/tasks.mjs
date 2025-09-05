@@ -177,6 +177,7 @@ router.all("/api/pending", authMiddleware, async (req, res) => {
         $gte: startOfDay,
         $lte: endOfDay,
       },
+      user: req.user._id,
     });
 
     res.json(tasks);
@@ -200,11 +201,55 @@ router.all("/api/completed", authMiddleware, async (req, res) => {
         $gte: startOfDay,
         $lte: endOfDay,
       },
+      user: req.user._id,
     });
 
     res.json(tasks);
   } catch (err) {
     console.error("Error fetching completed tasks:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//urgent tasks logic fetch
+router.all("/api/urgent", authMiddleware, async (req, res) => {
+  try {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const tasks = await Task.find({
+      priority: "Urgent",
+      deadline: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+      user: req.user._id,
+    });
+
+    res.json(tasks);
+  } catch (err) {
+    console.error("Error fetching completed tasks:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//overdue tasks
+router.all("/api/overdue", authMiddleware, async (req, res) => {
+  try {
+    const now = new Date();
+
+    const tasks = await Task.find({
+      deadline: { $lt: now },
+      status: { $ne: "Completed" },
+      user: req.user._id,
+    });
+
+    res.json(tasks);
+  } catch (err) {
+    console.error("Error fetching overdue tasks:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -221,7 +266,7 @@ router.get("/api/count", authMiddleware, async (req, res) => {
 
     console.log(tasks);
     tasks.forEach((task) => {
-      const status = task.status?.toLowerCase(); // normalize
+      const status = task.status?.toLowerCase();
       if (status === "completed") result.completed += 1;
       else if (status === "pending") result.pending += 1;
       else if (status === "in-progress") result["in-progress"] += 1;
