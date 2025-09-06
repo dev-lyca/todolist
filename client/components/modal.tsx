@@ -1,8 +1,11 @@
 "use client";
 import { useUser } from "@/context/userContext";
 import {
+  Accordion,
+  AccordionItem,
   addToast,
   Button,
+  Divider,
   Input,
   Modal,
   ModalBody,
@@ -11,9 +14,11 @@ import {
   ModalHeader,
   Select,
   SelectItem,
+  Textarea,
 } from "@heroui/react";
 import React, { useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
+import { MdCheck } from "react-icons/md";
 import { PiXCircle } from "react-icons/pi";
 
 interface TaskModalProps {
@@ -30,6 +35,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
   const [deadline, setDeadline] = useState("");
   const [reminderAt, setReminderAt] = useState("");
   const [loading, isLoading] = useState(false);
+  const [selectedColor, setSelectedColor] = useState("blue-500");
 
   const handleSave = async () => {
     if (!user) {
@@ -53,6 +59,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
         category,
         deadline,
         reminderAt,
+        color: selectedColor,
       };
 
       const response = await fetch(
@@ -96,40 +103,97 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  const colorGroups = [
+    {
+      title: "Warm Neutrals",
+      colors: [
+        "#F5E6DA", // soft nude beige
+        "#EAD9C6", // light sand
+        "#D6BFAF", // muted taupe
+        "#C8A78A", // warm tan
+        "#A98467", // earthy mocha
+        "#8B5E3C", // deep caramel
+      ],
+    },
+    {
+      title: "Soft Earth Tones",
+      colors: [
+        "#FDF6EC", // cream white
+        "#F4E1D2", // pale peach beige
+        "#EAD1C2", // clay nude
+        "#D9BBA9", // warm clay
+        "#C7A499", // muted rose beige
+        "#A68A79", // dusty cocoa
+      ],
+    },
+    {
+      title: "Minimal Accents",
+      colors: [
+        "#FFF7ED", // warm ivory
+        "#FEF3C7", // soft amber cream
+        "#FDE68A", // muted pastel amber
+        "#FBCFE8", // nude pink
+        "#E5E7EB", // soft gray
+        "#D1D5DB", // cool neutral gray
+      ],
+    },
+  ];
+
   return (
-    <Modal isOpen={isOpen} size="lg" onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      size="lg"
+      onClose={onClose}
+      backdrop="opaque"
+      classNames={{
+        backdrop:
+          "bg-linear-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
+      }}
+      className="h-full"
+      placement="top"
+    >
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Add New Task
+            <ModalHeader className="flex flex-col gap-1 border-b pb-3">
+              <h2 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+                Add New Task
+              </h2>
+              <p className="text-sm text-gray-500">
+                Fill in the details to create your task
+              </p>
             </ModalHeader>
-            <ModalBody>
-              <div className="flex justify-between gap-2">
+
+            <ModalBody className="space-y-4 py-4">
+              <div className="space-y-3">
                 <Input
                   label="Title"
-                  placeholder="Enter task title"
+                  placeholder="e.g. Finish project report"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="mb-4"
+                  variant="bordered"
+                  radius="lg"
                 />
-
-                <Input
+                <Textarea
                   label="Description"
-                  placeholder="Enter task description"
-                  type="text"
+                  placeholder="Add more details about your task"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="mb-4"
+                  variant="bordered"
+                  radius="lg"
+                  minRows={4}
+                  maxRows={6}
                 />
               </div>
-              <div className="flex justify-between gap-2">
+
+              <div className="grid grid-cols-2 gap-3">
                 <Select
                   label="Priority"
-                  className="mb-4"
                   selectedKeys={[priority]}
                   onChange={(e) => setPriority(e.target.value)}
+                  variant="bordered"
+                  radius="lg"
                 >
                   <SelectItem key="Low">Low</SelectItem>
                   <SelectItem key="Moderate">Moderate</SelectItem>
@@ -138,42 +202,86 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
 
                 <Select
                   label="Category"
-                  className="mb-4"
                   selectedKeys={[category]}
                   onChange={(e) => setCategory(e.target.value)}
+                  variant="bordered"
+                  radius="lg"
                 >
                   <SelectItem key="Personal">Personal</SelectItem>
                   <SelectItem key="School">School</SelectItem>
-                  <SelectItem key="work">Work</SelectItem>
+                  <SelectItem key="Work">Work</SelectItem>
                 </Select>
               </div>
 
-              <div className="flex justify-between gap-2">
+              <div className="grid grid-cols-2 gap-3">
                 <Input
                   label="Deadline"
-                  placeholder="Select deadline"
                   type="date"
                   value={deadline}
                   onChange={(e) => setDeadline(e.target.value)}
-                  className="mb-4"
+                  variant="bordered"
+                  radius="lg"
                 />
-
                 <Input
                   label="Reminder"
-                  placeholder="Select reminder date"
                   type="date"
                   value={reminderAt}
                   onChange={(e) => setReminderAt(e.target.value)}
+                  variant="bordered"
+                  radius="lg"
                 />
               </div>
+              <Divider />
+              <h3>Choose Theme</h3>
+              <Accordion isCompact variant="light" className="mt-0">
+                {colorGroups.map((group, i) => (
+                  <AccordionItem
+                    key={i}
+                    aria-label={group.title}
+                    title={group.title}
+                    className="text-sm font-semibold text-gray-600"
+                  >
+                    <div className="flex flex-row gap-3 mb-2">
+                      {group.colors.map((color, j) => {
+                        const isSelected = selectedColor === color;
+                        return (
+                          <div
+                            key={j}
+                            className={`relative w-10 h-10 rounded-md cursor-pointer shadow-md transition 
+                ${isSelected ? "ring-2 ring-offset-2 ring-gray-800 scale-110" : "hover:scale-105"}`}
+                            style={{ backgroundColor: color }}
+                            onClick={() => setSelectedColor(color)}
+                          >
+                            <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 rounded-md transition" />
+
+                            {isSelected && (
+                              <MdCheck className="absolute inset-0 m-auto text-white text-2xl drop-shadow-lg" />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </ModalBody>
 
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                Close
+            <ModalFooter className="border-t">
+              <Button
+                variant="light"
+                color="danger"
+                onPress={onClose}
+                radius="full"
+              >
+                Cancel
               </Button>
-              <Button color="primary" onPress={handleSave} isLoading={loading}>
-                Save
+              <Button
+                className="bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold shadow-md hover:shadow-lg"
+                onPress={handleSave}
+                isLoading={loading}
+                radius="full"
+              >
+                Save Task
               </Button>
             </ModalFooter>
           </>

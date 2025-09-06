@@ -2,7 +2,7 @@
 
 import { Task } from "@/types";
 import { formatDate } from "@/utils/date";
-import { Card } from "@heroui/react";
+import { Card, CircularProgress } from "@heroui/react";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import {
   BsFillClockFill,
   BsHourglassSplit,
 } from "react-icons/bs";
+import { GoArrowUpRight } from "react-icons/go";
 
 const PendingToday = () => {
   const [pending, setPending] = useState<Task[] | null>(null);
@@ -59,18 +60,33 @@ const PendingToday = () => {
     fetchPending();
   }, []);
 
-  if (pending === null) return <>Loading pending tasks...</>;
-
   return (
     <div className="w-full max-w-sm mx-auto overflow-hidden py-5">
-      <h1 className="text-xl font-bold mb-4 text-gray-600">Pending Tasks</h1>
+      <div className="flex justify-between items-center mb-2">
+        <div>
+          {" "}
+          <h1 className="text-xl font-bold text-gray-700">Pending Tasks</h1>
+        </div>
+        <div className="flex items-center text-gray-600">
+          <span className="text-sm">View all</span>
+          <span>
+            <GoArrowUpRight />
+          </span>
+        </div>
+      </div>
 
-      {pending.length === 0 ? (
+      {pending === null ? (
+        <div className="flex justify-center items-center h-40">
+          <CircularProgress size="lg" color="default" aria-label="Loading..." />
+        </div>
+      ) : pending.length === 0 ? (
         <Card
           shadow="sm"
           className="rounded-md mb-4 p-6 flex flex-col items-center justify-center text-center gap-3"
         >
-          <BsFillClockFill className="text-amber-500 text-4xl" />
+          <div className="p-3 rounded-full bg-gray-100">
+            <BsFillClockFill className="text-gray-500 text-4xl" />
+          </div>
           <h3 className="text-gray-700 font-semibold text-lg">
             No Pending Tasks Today
           </h3>

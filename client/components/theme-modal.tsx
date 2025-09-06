@@ -21,7 +21,6 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
   onOpenChange,
   id,
 }) => {
-  console.log("This is theme modal", id);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const colorGroups = [
     {

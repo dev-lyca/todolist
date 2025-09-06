@@ -66,8 +66,11 @@ const Dashboard = () => {
         </p>
       </div>
 
-      <Card shadow="md" className="rounded-t-full px-6 mt-5 mx-2">
-        <div className="block sm-hidden">
+      <Card
+        shadow="md"
+        className="block sm-hidden rounded-t-full px-6 mt-5 mx-2 "
+      >
+        <div className="">
           <ProgressCards />
         </div>
       </Card>
@@ -78,15 +81,6 @@ const Dashboard = () => {
           <PendingToday />
           <CompletedToday />
           <OverdueTasks />
-        </div>
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-4 
-      w-full max-w-7xl"
-        >
-          <div className="hidden sm:block">
-            <PendingToday />
-            <CompletedToday />
-          </div>
         </div>
       </Card>
     </section>

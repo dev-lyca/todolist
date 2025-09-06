@@ -8,7 +8,6 @@ import {
   Card,
   CardBody,
   Checkbox,
-  Chip,
   CircularProgress,
   Dropdown,
   DropdownItem,
@@ -20,7 +19,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaPlus, FaTrash } from "react-icons/fa";
-import { TbMoodEmptyFilled } from "react-icons/tb";
+import { MdOutlineChecklistRtl } from "react-icons/md";
 
 const MyTasks = () => {
   const [selectedTasks, setSelectedTasks] = useState<string[]>([]);
@@ -48,9 +47,12 @@ const MyTasks = () => {
     setLoading(true);
     const fetchTasks = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/all-tasks`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/all-tasks`,
+          {
+            credentials: "include",
+          }
+        );
 
         if (!res.ok) {
           throw new Error("Failed to fetch tasks");
@@ -91,12 +93,15 @@ const MyTasks = () => {
     setChecked(false);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/delete/tasks`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ ids: selectedTasks }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/delete/tasks`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ ids: selectedTasks }),
+        }
+      );
 
       const data = await res.json();
 
@@ -130,9 +135,9 @@ const MyTasks = () => {
   }
 
   return (
-    <section className="mt-14 w-full">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
-        <div className="w-full sm:w-1/2">
+    <section className="mt-14 mb-14 w-full">
+      <div className="flex items-center justify-between w-full gap-4">
+        <div className="w-2/3 lg:w-1/2">
           {" "}
           <Input
             aria-label="Search"
@@ -153,13 +158,17 @@ const MyTasks = () => {
             {!checked && (
               <FaPlus
                 size={30}
-                className="text-blue-700 cursor-pointer text-xl pr-3"
+                className="hidden sm:block text-blue-700 cursor-pointer text-xl pr-3"
                 onClick={onOpenAdd}
               />
             )}
             {!checked ? (
               <div className="flex items-center gap-2">
-                <Checkbox isSelected={checked} onValueChange={setChecked} />
+                <Checkbox
+                  size="lg"
+                  isSelected={checked}
+                  onValueChange={setChecked}
+                />
               </div>
             ) : (
               <FaTrash
@@ -177,90 +186,112 @@ const MyTasks = () => {
 
       <div className="mt-6">
         {filteredTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-82 w-full text-gray-500">
-            <TbMoodEmptyFilled size={80} className="mb-4 text-gray-400" />
-            <p className="text-xl font-medium">No data</p>
+          <div className="flex flex-col items-center justify-center min-h-80 w-full">
+            <div className="p-6 rounded-full bg-red-50">
+              <MdOutlineChecklistRtl
+                size={72}
+                className="text-amber-600 drop-shadow-sm"
+              />
+            </div>
+
+            <p className="mt-2 text-lg font-semibold text-gray-700">
+              No tasks yet
+            </p>
+            <p className="text-sm text-gray-400">Start by adding a new task</p>
           </div>
         ) : (
           filteredTasks.map((task) => (
             <Card
               key={task._id}
-              className="mb-4"
-              style={{ backgroundColor: task.color || "#FFFFFF" }}
+              shadow="sm"
+              radius="lg"
+              className="mb-3 border-l-4 border-amber-500 overflow-hidden"
+              style={{
+                background: "linear-gradient(135deg, #FFEFD5, #FFD6A5)",
+              }}
             >
-              <CardBody className="w-full">
-                <div className="flex flex-row gap-10 items-center">
-                  {checked && (
-                    <div>
-                      <Checkbox
-                        isSelected={selectedTasks.includes(task._id!)}
-                        onChange={() => toggleSelection(task._id!)}
-                      />
-                    </div>
-                  )}
-                  <div className="flex-1 pr-4">
+              <CardBody className="w-full flex flex-row items-center justify-between p-4">
+                {checked && (
+                  <Checkbox
+                    isSelected={selectedTasks.includes(task._id!)}
+                    onChange={() => toggleSelection(task._id!)}
+                    className="mr-3"
+                  />
+                )}
+
+                <div className="flex-1">
+                  {/* <div className="flex items-center gap-2 mb-1 text-white">
                     <Chip
                       size="sm"
+                      variant="solid"
                       color={
                         task.status === "Pending"
                           ? "default"
                           : task.status === "In-progress"
-                            ? "primary"
+                            ? "warning"
                             : "success"
                       }
+                      className="capitalize"
                     >
                       {task.status}
                     </Chip>
-                    <h1 className="text-lg font-bold">{task.title}</h1>
-                    <p className="text-sm text-gray-700">{task.description}</p>
-                    <small className="text-gray-500 italic">
-                      {task.deadline
-                        ? new Date(task.deadline).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })
-                        : "No deadline"}
-                    </small>
-                  </div>
+                  </div> */}
 
-                  <div className="shrink-0 flex flex-col items-end gap-2">
-                    <Dropdown>
-                      <DropdownTrigger>
-                        <BsThreeDotsVertical
-                          size={20}
-                          className="cursor-pointer"
-                        />
-                      </DropdownTrigger>
-                      <DropdownMenu aria-label="Static Actions">
-                        <DropdownItem
-                          key="edit"
-                          as={Link}
-                          href={`/userpage/task/${task._id}`}
-                        >
-                          Edit
-                        </DropdownItem>
-                        <DropdownItem
-                          key="delete"
-                          className="text-danger"
-                          color="danger"
-                          onPress={() => {
-                            setSelectedId(task._id ?? null);
-                            onOpenDel();
-                          }}
-                        >
-                          Delete
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
+                  <div>
+                    <h1 className="text-md font-semibold text-gray-800 truncate">
+                      {task.title}
+                    </h1>
+                    <span className="text-sm font-light line-clamp-1">
+                      {task.description}
+                    </span>
                   </div>
+                  <small className="text-xs text-gray-400">
+                    {task.deadline
+                      ? new Date(task.deadline).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })
+                      : "No deadline"}
+                  </small>
                 </div>
+
+                {/* Options menu */}
+                <Dropdown>
+                  <DropdownTrigger>
+                    <BsThreeDotsVertical
+                      size={18}
+                      className="cursor-pointer text-gray-500 hover:text-amber-600"
+                    />
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="Task Actions">
+                    <DropdownItem
+                      key="edit"
+                      as={Link}
+                      href={`/userpage/task/${task._id}`}
+                    >
+                      Edit
+                    </DropdownItem>
+                    <DropdownItem
+                      key="delete"
+                      className="text-danger"
+                      color="danger"
+                      onPress={() => {
+                        setSelectedId(task._id ?? null);
+                        onOpenDel();
+                      }}
+                    >
+                      Delete
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </CardBody>
             </Card>
           ))
         )}
       </div>
-      <TaskModal isOpen={isAddOpenn} onClose={onAddOpenChange} />
+      <div className="hidden sm:block">
+        <TaskModal isOpen={isAddOpenn} onClose={onAddOpenChange} />
+      </div>
       <DeleteModal
         isOpen={isDelOpen}
         onOpenChange={onDelOpenChange}

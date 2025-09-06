@@ -1,11 +1,12 @@
 "use client";
 
 import { Task } from "@/types";
-import { Card } from "@heroui/react";
+import { Card, CircularProgress } from "@heroui/react";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { useEffect, useState } from "react";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
+import { GoArrowUpRight } from "react-icons/go";
 
 export default function UrgentTasksSlider() {
   const [tasks, setTasks] = useState<Task[] | null>(null);
@@ -46,15 +47,28 @@ export default function UrgentTasksSlider() {
     fetchUrgent();
   }, []);
 
-  if (tasks === null) return <>Loading urgent tasks...</>;
-
   return (
     <div className="w-full max-w-sm mx-auto overflow-hidden py-5 mt-3">
       {" "}
-      <h1 className="text-xl font-bold mb-4 text-amber-900">
-        Urgent Tasks You Can’t Ignore!
-      </h1>
-      {tasks.length === 0 ? (
+      <div className="flex justify-between items-center mb-2">
+        <div>
+          {" "}
+          <h1 className="text-xl font-bold bg-gradient-to-r from-red-500 via-orange-400 to-amber-600 bg-clip-text text-transparent">
+            Urgent Tasks
+          </h1>
+        </div>
+        <div className="flex items-center text-gray-600">
+          <span className="text-sm">View all</span>
+          <span>
+            <GoArrowUpRight />
+          </span>
+        </div>
+      </div>
+      {tasks === null ? (
+        <div className="flex justify-center items-center h-40">
+          <CircularProgress size="lg" color="warning" aria-label="Loading..." />
+        </div>
+      ) : tasks.length === 0 ? (
         <Card
           shadow="sm"
           className="rounded-md mb-4 p-6 flex flex-col items-center justify-center text-center gap-3"

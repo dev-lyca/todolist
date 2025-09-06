@@ -1,12 +1,13 @@
 "use client";
 
 import { Task } from "@/types";
-import { Card } from "@heroui/react";
+import { Card, CircularProgress } from "@heroui/react";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
+import { GoArrowUpRight } from "react-icons/go";
 
 export default function OverdueTasks() {
   const [tasks, setTasks] = useState<Task[] | null>(null);
@@ -47,18 +48,29 @@ export default function OverdueTasks() {
     fetchOverdue();
   });
 
-  if (tasks === null) return <h1>No data</h1>;
-
   return (
     <div className="w-full max-w-sm mx-auto overflow-hidden py-5">
-      <h1 className="text-xl font-bold mb-4 text-red-600 flex items-center gap-2">
-        Overdue Tasks
-      </h1>
+      <div className="flex justify-between items-center mb-2">
+        <div>
+          {" "}
+          <h1 className="text-xl font-bold text-red-600">Overdue Tasks</h1>
+        </div>
+        <div className="flex items-center text-gray-600">
+          <span className="text-sm">View all</span>
+          <span>
+            <GoArrowUpRight />
+          </span>
+        </div>
+      </div>
 
-      {tasks.length === 0 ? (
+      {tasks === null ? (
+        <div className="flex justify-center items-center h-40">
+          <CircularProgress size="lg" color="danger" aria-label="Loading..." />
+        </div>
+      ) : tasks.length === 0 ? (
         <Card
           shadow="sm"
-          className="rounded-md mb-4 p-6 flex flex-col items-center justify-center text-center gap-3"
+          className="rounded-md border-none mb-4 p-6 flex flex-col items-center justify-center text-center gap-3"
         >
           <div className="p-3 rounded-full bg-red-100">
             <BsFillExclamationCircleFill className="text-red-600 text-3xl" />
