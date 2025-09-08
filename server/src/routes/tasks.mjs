@@ -173,10 +173,20 @@ router.all("/api/pending", authMiddleware, async (req, res) => {
 
     const tasks = await Task.find({
       status: "Pending",
-      createdAt: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
+      // $or: [
+      //   {
+      //     deadline: {
+      //       $gte: startOfDay,
+      //       $lte: endOfDay,
+      //     },
+      //   },
+      //   {
+      //     reminderAt: {
+      //       $gte: startOfDay,
+      //       $lte: endOfDay,
+      //     },
+      //   },
+      // ],
       user: req.user._id,
     });
 
@@ -197,7 +207,7 @@ router.all("/api/completed", authMiddleware, async (req, res) => {
 
     const tasks = await Task.find({
       status: "Completed",
-      createdAt: {
+      updatedAt: {
         $gte: startOfDay,
         $lte: endOfDay,
       },
@@ -222,11 +232,22 @@ router.all("/api/urgent", authMiddleware, async (req, res) => {
 
     const tasks = await Task.find({
       priority: "Urgent",
-      deadline: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
+      status: { $ne: "Completed" },
       user: req.user._id,
+      $or: [
+        {
+          deadline: {
+            $gte: startOfDay,
+            $lte: endOfDay,
+          },
+        },
+        {
+          reminderAt: {
+            $gte: startOfDay,
+            $lte: endOfDay,
+          },
+        },
+      ],
     });
 
     res.json(tasks);
