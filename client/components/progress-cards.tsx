@@ -154,12 +154,12 @@ const ProgressCards = () => {
           </CardBody>
         </Card>
       </div>
-      <div className="flex lg:hidden flex-row items-center mt-10 mb-5 gap-6 justify-center">
+      <div className="flex lg:hidden flex-row items-center mt-10 mb-5 gap-6 justify-center p-2">
         <div className="relative flex items-center justify-center">
           <CircularProgress
             aria-label="Completed tasks"
             color="success"
-            size="lg"
+            size="md"
             value={loading ? 0 : completedPercent}
             showValueLabel={true}
             label="Completed"
@@ -168,12 +168,12 @@ const ProgressCards = () => {
 
         <div className="relative flex items-center justify-center">
           <CircularProgress
-            aria-label="In-progress tasks"
+            aria-label="Ongoing tasks"
             color="primary"
-            size="lg"
+            size="md"
             value={loading ? 0 : inProgressPercent}
             showValueLabel={true}
-            label="In-Progress"
+            label="Ongoing"
           />
         </div>
 
@@ -181,7 +181,7 @@ const ProgressCards = () => {
           <CircularProgress
             aria-label="Pending tasks"
             color="warning"
-            size="lg"
+            size="md"
             value={loading ? 0 : pendingPercent}
             showValueLabel={true}
             label="Pending"

@@ -149,7 +149,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
         backdrop:
           "bg-linear-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
       }}
-      className="h-full"
+      className="h-full lg:h-[500px] sticky"
       placement="top"
     >
       <ModalContent>
@@ -164,7 +164,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
               </p>
             </ModalHeader>
 
-            <ModalBody className="space-y-4 py-4">
+            <ModalBody className="space-y-4 py-4 overflow-auto">
               <div className="space-y-3">
                 <Input
                   label="Title"

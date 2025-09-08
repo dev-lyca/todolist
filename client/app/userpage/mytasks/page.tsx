@@ -136,7 +136,7 @@ const MyTasks = () => {
 
   return (
     <section className="mt-14 mb-14 w-full">
-      <div className="flex items-center justify-between w-full gap-4">
+      <div className="flex items-center justify-between max-w-full gap-4">
         <div className="w-2/3 lg:w-1/2">
           {" "}
           <Input
@@ -156,11 +156,19 @@ const MyTasks = () => {
         <div className="flex-shrink-0">
           <div className="flex gap-2">
             {!checked && (
-              <FaPlus
-                size={30}
-                className="hidden sm:block text-blue-700 cursor-pointer text-xl pr-3"
-                onClick={onOpenAdd}
-              />
+              // <FaPlus
+              //   size={30}
+              //   className="hidden sm:block text-blue-700 cursor-pointer text-xl pr-3"
+              //   onClick={onOpenAdd}
+              // />
+              <div className="hidden lg:block items-center justify-center w-8 h-8 rounded-full ">
+                <FaPlus
+                  size={30}
+                  className="text-amber-600 hover:scale-110 
+                  transition-transform duration-200 cursor-pointer"
+                  onClick={onOpenAdd}
+                />
+              </div>
             )}
             {!checked ? (
               <div className="flex items-center gap-2">
@@ -186,7 +194,7 @@ const MyTasks = () => {
 
       <div className="mt-6">
         {filteredTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-80 w-full">
+          <div className="flex flex-col items-center justify-center min-h-80">
             <div className="p-6 rounded-full bg-red-50">
               <MdOutlineChecklistRtl
                 size={72}
@@ -210,7 +218,7 @@ const MyTasks = () => {
                 background: "linear-gradient(135deg, #FFEFD5, #FFD6A5)",
               }}
             >
-              <CardBody className="w-full flex flex-row items-center justify-between p-4">
+              <CardBody className="flex flex-row items-center justify-between p-4">
                 {checked && (
                   <Checkbox
                     isSelected={selectedTasks.includes(task._id!)}
@@ -219,24 +227,7 @@ const MyTasks = () => {
                   />
                 )}
 
-                <div className="flex-1">
-                  {/* <div className="flex items-center gap-2 mb-1 text-white">
-                    <Chip
-                      size="sm"
-                      variant="solid"
-                      color={
-                        task.status === "Pending"
-                          ? "default"
-                          : task.status === "In-progress"
-                            ? "warning"
-                            : "success"
-                      }
-                      className="capitalize"
-                    >
-                      {task.status}
-                    </Chip>
-                  </div> */}
-
+                <div className="flex-1 break-words">
                   <div>
                     <h1 className="text-md font-semibold text-gray-800 truncate">
                       {task.title}
