@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import MongoStore from "connect-mongo";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import session from "express-session";
@@ -18,9 +19,14 @@ mongoose
   .catch((err) => console.error("DB Connection Error:", err));
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://tracktask-nggt.onrender.com", "http://localhost:3000"],
+    origin: [
+      "https://tracktask-nggt.onrender.com",
+      "https://tracktask-five.vercel.app/",
+      "http://localhost:3000",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -53,6 +59,16 @@ app.use(routes);
 
 app.get("/", (req, res) => {
   res.send("TrackTask backend is running ✅");
+});
+
+app.get("/api/auth/session", (req, res) => {
+  console.log("Cookies:", req.cookies);
+  console.log("Session:", req.session);
+  console.log("User:", req.user);
+  if (req.session?.user) {
+    return res.status(200).json({ user: req.session.user });
+  }
+  res.status(401).json({ error: "Not authenticated" });
 });
 
 const PORT = process.env.PORT || 8080;
