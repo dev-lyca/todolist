@@ -36,7 +36,10 @@ const UrgentTasks = () => {
       <div className="flex justify-between items-center mb-2">
         <div>
           {" "}
-          <h1 className="text-xl font-bold bg-gradient-to-r from-red-500 via-orange-400 to-amber-600 bg-clip-text text-transparent">
+          <h1
+            className="text-xl font-bold bg-gradient-to-r 
+          from-red-500 via-orange-500 to-amber-600 bg-clip-text text-transparent"
+          >
             Urgent Tasks
           </h1>
         </div>
@@ -55,7 +58,8 @@ const UrgentTasks = () => {
       ) : tasks.length === 0 ? (
         <Card
           shadow="sm"
-          className="rounded-md mb-4 p-6 flex flex-col items-center justify-center text-center gap-3"
+          className="rounded-md mb-4 p-6 flex flex-col 
+          items-center justify-center text-center gap-3 bg-amber-50"
         >
           <div className="p-3 rounded-full bg-amber-100">
             <BsFillExclamationCircleFill className="text-amber-600 text-3xl" />

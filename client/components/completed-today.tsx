@@ -53,7 +53,8 @@ const CompletedToday = () => {
       ) : tasks.length === 0 ? (
         <Card
           shadow="sm"
-          className="rounded-md border-none mb-4 p-6 flex flex-col items-center justify-center text-center gap-3"
+          className="rounded-md border-none mb-4 p-6 flex 
+          flex-col items-center justify-center text-center gap-3 bg-green-50"
         >
           <div className="p-3 rounded-full bg-red-100">
             <BsFillCheckCircleFill className="text-green-600 text-3xl" />

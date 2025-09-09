@@ -9,10 +9,11 @@ import {
 } from "@heroui/dropdown";
 import {
   Navbar as HeroUINavbar,
+  NavbarBrand,
   NavbarContent,
   NavbarItem,
 } from "@heroui/navbar";
-import { Avatar } from "@heroui/react";
+import { Avatar, Image } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { MdLogout } from "react-icons/md";
 
@@ -48,9 +49,9 @@ export const Navbar = () => {
     <HeroUINavbar
       maxWidth="xl"
       position="sticky"
-      className="w-full top-0 z-50 shadow-md bg-white"
+      className="w-full top-0 z-50 shadow-md bg-gray-900"
     >
-      {/* <NavbarBrand className="block sm:hidden">
+      <NavbarBrand className="block sm:hidden">
         <Image
           src="/images/logo.png"
           alt="Logo"
@@ -58,7 +59,7 @@ export const Navbar = () => {
           height={200}
           className="object-contain"
         />
-      </NavbarBrand> */}
+      </NavbarBrand>
 
       <NavbarContent justify="end">
         <NavbarItem>

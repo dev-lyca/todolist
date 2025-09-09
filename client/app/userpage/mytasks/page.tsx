@@ -135,17 +135,21 @@ const MyTasks = () => {
   }
 
   return (
-    <section className="mt-14 mb-14 w-full">
+    <section className="mt-14 mx-auto mb-14 w-full">
       <div className="flex items-center justify-between max-w-full gap-4">
         <div className="w-2/3 lg:w-1/2">
           {" "}
           <Input
             aria-label="Search"
             classNames={{ inputWrapper: "bg-default-100", input: "text-sm" }}
+            className="bg-gray-200 rounded-xl"
             labelPlacement="outside"
             placeholder="Search tasks..."
             startContent={
-              <SearchIcon className="text-default-400 pointer-events-none flex-shrink-0" />
+              <SearchIcon
+                className="text-default-400 
+              pointer-events-none flex-shrink-0"
+              />
             }
             type="search"
             value={searchQuery}
@@ -176,6 +180,7 @@ const MyTasks = () => {
                   size="lg"
                   isSelected={checked}
                   onValueChange={setChecked}
+                  className="text-gray-400"
                 />
               </div>
             ) : (
@@ -213,10 +218,7 @@ const MyTasks = () => {
               key={task._id}
               shadow="sm"
               radius="lg"
-              className="mb-3 border-l-4 border-amber-500 overflow-hidden"
-              style={{
-                background: "linear-gradient(135deg, #FFEFD5, #FFD6A5)",
-              }}
+              className="mb-3 border-l-4 border-orange-500 bg-orange-50 overflow-hidden text-white"
             >
               <CardBody className="flex flex-row items-center justify-between p-4">
                 {checked && (
@@ -236,7 +238,7 @@ const MyTasks = () => {
                       {task.description}
                     </span>
                   </div>
-                  <small className="text-xs text-gray-400">
+                  <small className="text-xs text-gray-700">
                     {task.deadline
                       ? new Date(task.deadline).toLocaleDateString("en-US", {
                           month: "short",

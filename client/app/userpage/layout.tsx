@@ -23,10 +23,8 @@ export default function UserLayout({
             <Navbar />
           </div>
 
-          <main className="flex-1 overflow-y-auto px-4 py-6 w-full">
-            <div className="">
-              {children}
-            </div>
+          <main className="flex-1 overflow-y-auto px-4 py-6 w-full bg-gray-900">
+            <div className="">{children}</div>
           </main>
         </div>
 

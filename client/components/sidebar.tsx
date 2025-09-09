@@ -8,7 +8,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   return (
     <div className="h-screen bg-[#fdfaf6] text-[#4a3f35] overflow-hidden">
-      <aside className="fixed top-0 left-0 h-screen w-64 bg-[#1a1717] p-6 shadow-lg overflow-hidden">
+      <aside className="fixed top-0 left-0 h-screen w-64 bg-gradient-to-r from-gray-900 to-gray-700 p-6 shadow-lg overflow-hidden">
         <div className="flex items-center gap-2 mb-6">
           <Image
             src="/images/logo.png"
