@@ -13,13 +13,16 @@ export async function middleware(req: NextRequest) {
   if (protectedPrefixes.some((prefix) => pathname.startsWith(prefix))) {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/session`,
-        {
-          headers: {
-            cookie: req.headers.get("cookie") || "",
-          },
-        }
-      );
+  `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/session`,
+  {
+    method: "GET",
+    headers: {
+      cookie: req.headers.get("cookie") || "", 
+    },
+    credentials: "include", // 
+  }
+);
+
 
       if (res.status !== 200) {
         const loginUrl = new URL("/login", req.url);
