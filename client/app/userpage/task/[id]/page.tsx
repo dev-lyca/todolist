@@ -3,7 +3,6 @@ import CalendarModal from "@/components/calendar-modal";
 import ThemeModal from "@/components/theme-modal";
 import { Task } from "@/types";
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -19,7 +18,7 @@ import {
 } from "@heroui/react";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FaRegCalendarAlt } from "react-icons/fa";
+import { FaCheckCircle, FaRegCalendarAlt } from "react-icons/fa";
 import { IoIosAlarm } from "react-icons/io";
 import { IoColorPalette } from "react-icons/io5";
 
@@ -123,12 +122,7 @@ const Tasks = () => {
   ) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      const newParagraphs = [...paragraphs];
-      newParagraphs.splice(index + 1, 0, "");
-      setParagraphs(newParagraphs);
-      setTimeout(() => {
-        editableRefs.current[index + 1]?.focus();
-      }, 0);
+      document.execCommand("insertLineBreak");
     }
   };
 
@@ -145,9 +139,10 @@ const Tasks = () => {
       .filter((text) => text.trim() !== "");
 
     setParagraphs(newParagraphs);
-    updates.description = newParagraphs.join("\n\n");
-    updateTask(updates);
 
+    updates.description = newParagraphs.join("\n");
+
+    updateTask(updates);
     setEditingIndex(null);
   };
 
@@ -162,15 +157,15 @@ const Tasks = () => {
   if (!tasks) return <p>Task not found</p>;
 
   return (
-    <div className="mt-14 sm:mt-12">
+    <div className="mt-14 mb-14 sm:mt-12">
       <Card
-        className="p-6 max-h-40 sm:max-h-60 md:max-h-80 lg:max-h-[32rem]"
+        className="p-6"
         style={{ backgroundColor: tasks.color || "#FFFFFF" }}
       >
         {paragraphs.map((text, i) => (
           <div key={i}>
             <CardHeader>
-              <div className="flex justify-between items-start w-full">
+              <div className="justify-between items-start w-full">
                 <div>
                   {tasks.status === "Completed" ? (
                     <Chip
@@ -257,6 +252,7 @@ const Tasks = () => {
                   >
                     {tasks.title}
                   </h1>
+
                   <small>
                     {new Intl.DateTimeFormat("en-US", {
                       weekday: "long",
@@ -303,14 +299,15 @@ const Tasks = () => {
             </CardHeader>
 
             <CardBody>
-              <div className="relative">
+              <div className="relative w-[290px] md:w-[400px] lg:w-[500px]">
                 <div
                   ref={(el) => {
                     editableRefs.current[i] = el;
                   }}
                   contentEditable
                   suppressContentEditableWarning
-                  className="mt-2 text-base text-gray-700 outline-none cursor-text"
+                  className=" mt-2 text-base 
+                  text-gray-700 outline-none cursor-text"
                   onFocus={(e) => {
                     setEditingIndex(i);
                     focusToEnd(e.currentTarget);
@@ -324,28 +321,30 @@ const Tasks = () => {
           </div>
         ))}
         {editingIndex !== null && (
-          <CardFooter>
+          <CardFooter className="mt-10">
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-4">
                 <Tooltip content="Select theme" showArrow={true}>
                   <IoColorPalette
                     size={30}
-                    className="text-[#124170] font-bold cursor-pointer"
+                    className="text-gray-700 font-bold cursor-pointer"
                     onClick={onOpenTheme}
                   />
                 </Tooltip>
                 <Tooltip content="Change reminder" showArrow={true}>
                   <IoIosAlarm
                     size={30}
-                    className="text-[#0b2c4e] font-bold cursor-pointer"
+                    className="text-gray-700 font-bold cursor-pointer"
                     onClick={onOpenReminder}
                   />
                 </Tooltip>
               </div>
 
-              <Button color="primary" onPress={handleSave}>
-                Save
-              </Button>
+              <FaCheckCircle
+                size={30}
+                className="text-gray-700 font-semibold shadow-md hover:shadow-lg"
+                onClick={handleSave}
+              />
             </div>
           </CardFooter>
         )}

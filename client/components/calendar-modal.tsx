@@ -32,21 +32,21 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
       if (!id) return;
 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/task/${id}`, { credentials: "include" });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/task/${id}`,
+          { credentials: "include" }
+        );
 
         if (!res.ok) throw new Error("Failed to fetch task");
 
         const task = await res.json();
 
         if (task.reminderAt) {
-          // Get YYYY-MM-DD string
           const dateOnly = new Date(task.reminderAt)
             .toISOString()
             .split("T")[0];
-          // Parse into CalendarDate
           setValue(parseDate(dateOnly));
         } else {
-          // Default to today
           const today = new Date().toISOString().split("T")[0];
           setValue(parseDate(today));
         }
@@ -67,12 +67,15 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
       const jsDate = new Date(value.year, value.month - 1, value.day);
       const isoDate = jsDate.toISOString();
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/tasks/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ reminderAt: isoDate }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/tasks/${id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ reminderAt: isoDate }),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to update reminder");
 
@@ -123,12 +126,22 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
               Set Reminder
             </ModalHeader>
             <ModalBody className="space-y-4 items-center">
-              <Calendar
-                aria-label="Date (Controlled)"
-                value={value ?? undefined}
-                onChange={setValue}
-                visibleMonths={2}
-              />
+              <div className="block lg:hidden">
+                <Calendar
+                  aria-label="Date (Controlled)"
+                  value={value ?? undefined}
+                  onChange={setValue}
+                  visibleMonths={1}
+                />
+              </div>
+              <div className="hidden lg:block">
+                <Calendar
+                  aria-label="Date (Controlled)"
+                  value={value ?? undefined}
+                  onChange={setValue}
+                  visibleMonths={2}
+                />
+              </div>
             </ModalBody>
 
             <ModalFooter>

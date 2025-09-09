@@ -22,61 +22,47 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
   id,
 }) => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [loading, isLoading] = useState(false);
   const colorGroups = [
     {
-      title: "Blues & Greens",
+      title: "Warm Neutrals",
       colors: [
-        "#1A4A96",
-        "#2D68C4",
-        "#3E80D3",
-        "#0BDA8F",
-        "#0BDA47",
-        "#0AAA40",
-        "#2E6F40",
-        "#CFFFDC",
+        "#F5E6DA", // soft nude beige
+        "#EAD9C6", // light sand
+        "#D6BFAF", // muted taupe
+        "#C8A78A", // warm tan
+        "#A98467", // earthy mocha
+        "#8B5E3C", // deep caramel
       ],
     },
     {
-      title: "Earthy Tones",
+      title: "Soft Earth Tones",
       colors: [
-        "#68BA7F",
-        "#253D2C",
-        "#D4DE95",
-        "#3D4127",
-        "#50300F",
-        "#7F5933",
-        "#704214",
-        "#CD1C18",
+        "#FDF6EC", // cream white
+        "#F4E1D2", // pale peach beige
+        "#EAD1C2", // clay nude
+        "#D9BBA9", // warm clay
+        "#C7A499", // muted rose beige
+        "#A68A79", // dusty cocoa
       ],
     },
     {
-      title: "Coral Pink Tones",
+      title: "Minimal Accents",
       colors: [
-        "#F88379",
-        "#E26F66",
-        "#F8A58E",
-        "#F8DCD4",
-        "#8BE3D5",
-        "#62BAAC",
-        "#9BE089",
-        "#74BA6C",
-      ],
-    },
-    {
-      title: "Pumpkin",
-      colors: [
-        "#FF7518",
-        "#CC5E13",
-        "#FFD1B3",
-        "#FFF0E1",
-        "#FFC985",
-        "#803600",
+        "#FFF7ED", // warm ivory
+        "#FEF3C7", // soft amber cream
+        "#FDE68A", // muted pastel amber
+        "#FBCFE8", // nude pink
+        "#E5E7EB", // soft gray
+        "#D1D5DB", // cool neutral gray
       ],
     },
   ];
 
   const handleSave = async () => {
     if (!selectedColor) return;
+
+    isLoading(true);
 
     try {
       const res = await fetch(
@@ -97,6 +83,8 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
       onOpenChange(false);
     } catch (err) {
       console.error("Error updating theme:", err);
+    } finally {
+      isLoading(false);
     }
   };
 
@@ -106,24 +94,6 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
       onOpenChange={onOpenChange}
       backdrop="blur"
       hideCloseButton
-      size="2xl"
-      motionProps={{
-        variants: {
-          enter: {
-            y: 0,
-            opacity: 1,
-            transition: { duration: 0.3, ease: "easeOut" },
-          },
-          exit: {
-            y: 100,
-            opacity: 0,
-            transition: { duration: 0.2, ease: "easeIn" },
-          },
-        },
-        initial: { y: 100, opacity: 0 },
-        animate: { y: 0, opacity: 1 },
-        exit: { y: 100, opacity: 0 },
-      }}
     >
       <ModalContent>
         {(onClose) => (
@@ -131,14 +101,17 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
             <ModalHeader className="flex flex-col gap-1">
               Select Theme Color
             </ModalHeader>
-            <ModalBody className="space-y-4">
+            <ModalBody className="space-y-6">
               {colorGroups.map((group, i) => (
-                <div key={i} className="flex flex-row items-center gap-4">
-                  <span className="w-32 font-medium text-gray-700">
+                <div
+                  key={i}
+                  className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6"
+                >
+                  <span className="w-full sm:w-32 font-medium text-gray-700 text-sm sm:text-base">
                     {group.title}
                   </span>
 
-                  <div className="flex flex-row gap-4">
+                  <div className="flex flex-wrap gap-3 sm:gap-4">
                     {group.colors.map((color, j) => {
                       const isSelected = selectedColor === color;
                       return (
@@ -147,12 +120,16 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
                           className="relative cursor-pointer group"
                           onClick={() => setSelectedColor(color)}
                         >
-                          <MdRectangle size={50} style={{ color }} />
+                          <MdRectangle
+                            size={45}
+                            className="sm:size-12"
+                            style={{ color }}
+                          />
 
                           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 rounded-sm transition" />
 
                           {isSelected && (
-                            <MdCheck className="absolute inset-0 m-auto text-white text-3xl" />
+                            <MdCheck className="absolute inset-0 m-auto text-white text-2xl sm:text-3xl" />
                           )}
                         </div>
                       );
@@ -167,9 +144,11 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
                 Close
               </Button>
               <Button
-                color="primary"
+                className="bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold shadow-md hover:shadow-lg"
                 onPress={handleSave}
                 disabled={!selectedColor}
+                isLoading={loading}
+                radius="full"
               >
                 Select
               </Button>

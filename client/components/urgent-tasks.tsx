@@ -5,7 +5,6 @@ import { Card, CircularProgress } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
 import { GoArrowUpRight } from "react-icons/go";
-import Slider from "./slider";
 
 const UrgentTasks = () => {
   const [tasks, settasks] = useState<Task[] | null>(null);
@@ -110,7 +109,7 @@ const UrgentTasks = () => {
             </div>
           </div>
           <div className="block lg:hidden mb-4">
-            <Slider>
+            <div className="h-[150px] overflow-y-auto space-y-4 scrollbar-hide">
               {tasks.map((task) => (
                 <div key={task._id}>
                   <div
@@ -145,7 +144,7 @@ const UrgentTasks = () => {
                   </div>
                 </div>
               ))}
-            </Slider>
+            </div>
           </div>
         </>
       )}

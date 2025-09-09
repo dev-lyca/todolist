@@ -11,7 +11,6 @@ import {
   BsHourglassSplit,
 } from "react-icons/bs";
 import { GoArrowUpRight } from "react-icons/go";
-import Slider from "./slider";
 
 const PendingToday = () => {
   const [pending, setPending] = useState<Task[] | null>(null);
@@ -119,47 +118,45 @@ const PendingToday = () => {
             </div>
           </div>
           <div className="block lg:hidden mb-4">
-            <Slider>
+            <div className="h-[150px] overflow-y-auto space-y-4 scrollbar-hide">
               {pending.map((task) => (
-                <div key={task._id}>
-                  <div
-                    className="rounded-xl shadow-sm bg-gray-50 
-                   border-l-4 border-gray-500
-                   transition hover:shadow-md p-4"
-                  >
-                    <div className="grid grid-cols-[auto,1fr] items-center gap-2">
-                      <BsHourglassSplit className="text-gray-600 text-lg" />
-                      <h2 className="text-base font-semibold text-gray-800 line-clamp-1">
-                        {task.title}
-                      </h2>
-                    </div>
+                <div
+                  key={task._id}
+                  className="rounded-xl shadow-sm bg-gray-50 
+      border-l-4 border-gray-500 transition hover:shadow-md p-4"
+                >
+                  <div className="grid grid-cols-[auto,1fr] items-center gap-2">
+                    <BsHourglassSplit className="text-gray-600 text-lg" />
+                    <h2 className="text-base font-semibold text-gray-800 line-clamp-1">
+                      {task.title}
+                    </h2>
+                  </div>
 
-                    <p className="text-sm text-gray-600 mb-3 truncate">
-                      {task.description}
-                    </p>
+                  <p className="text-sm text-gray-600 mb-3 truncate">
+                    {task.description}
+                  </p>
 
-                    <div className="grid grid-cols-2 items-center text-xs mt-auto">
-                      <span
-                        className={`px-2 rounded-full font-medium justify-self-start ${
-                          task.priority === "Urgent"
-                            ? "bg-red-100 text-red-600"
-                            : task.priority === "Moderate"
-                              ? "bg-amber-100 text-amber-600"
-                              : "bg-blue-100 text-blue-600"
-                        }`}
-                      >
-                        {task.priority}
-                      </span>
+                  <div className="grid grid-cols-2 items-center text-xs mt-auto">
+                    <span
+                      className={`px-2 rounded-full font-medium justify-self-start ${
+                        task.priority === "Urgent"
+                          ? "bg-red-100 text-red-600"
+                          : task.priority === "Moderate"
+                            ? "bg-amber-100 text-amber-600"
+                            : "bg-blue-100 text-blue-600"
+                      }`}
+                    >
+                      {task.priority}
+                    </span>
 
-                      <span className="grid grid-flow-col auto-cols-max items-center gap-1 text-gray-500 justify-self-end">
-                        <BsFillCalendar2Fill className="text-emerald-600 text-sm" />
-                        {task.createdAt ? formatDate(task.createdAt) : "N/A"}
-                      </span>
-                    </div>
+                    <span className="grid grid-flow-col auto-cols-max items-center gap-1 text-gray-500 justify-self-end">
+                      <BsFillCalendar2Fill className="text-emerald-600 text-sm" />
+                      {task.createdAt ? formatDate(task.createdAt) : "N/A"}
+                    </span>
                   </div>
                 </div>
               ))}
-            </Slider>
+            </div>
           </div>
         </>
       )}

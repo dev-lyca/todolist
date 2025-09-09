@@ -3,9 +3,8 @@
 import { Task } from "@/types";
 import { Card, CircularProgress } from "@heroui/react";
 import { useEffect, useState } from "react";
-import { BsCheckCircleFill, BsFillExclamationCircleFill } from "react-icons/bs";
+import { BsCheckCircleFill, BsFillCheckCircleFill } from "react-icons/bs";
 import { GoArrowUpRight } from "react-icons/go";
-import Slider from "./slider";
 
 const CompletedToday = () => {
   const [tasks, settasks] = useState<Task[] | null>(null);
@@ -57,10 +56,10 @@ const CompletedToday = () => {
           className="rounded-md border-none mb-4 p-6 flex flex-col items-center justify-center text-center gap-3"
         >
           <div className="p-3 rounded-full bg-red-100">
-            <BsFillExclamationCircleFill className="text-red-600 text-3xl" />
+            <BsFillCheckCircleFill className="text-green-600 text-3xl" />
           </div>
           <h3 className="text-gray-800 font-semibold text-lg">
-            No Overdue Tasks
+            No Completed Tasks
           </h3>
           <p className="text-gray-500 text-sm">
             You’ve cleared all past deadlines — nothing is hanging over your
@@ -93,7 +92,7 @@ const CompletedToday = () => {
             </div>
           </div>
           <div className="block lg:hidden mb-4">
-            <Slider>
+            <div className="h-[150px] overflow-y-auto space-y-4 scrollbar-hide">
               {tasks.map((task) => (
                 <div
                   className="rounded-xl shadow-sm bg-green-50 
@@ -113,7 +112,7 @@ const CompletedToday = () => {
                   </p>
                 </div>
               ))}
-            </Slider>
+            </div>
           </div>
         </>
       )}
