@@ -5,6 +5,7 @@ import { Card, CircularProgress } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
 import { GoArrowUpRight } from "react-icons/go";
+import { RiFileWarningFill } from "react-icons/ri";
 
 const UrgentTasks = () => {
   const [tasks, settasks] = useState<Task[] | null>(null);
@@ -38,12 +39,12 @@ const UrgentTasks = () => {
           {" "}
           <h1
             className="text-xl font-bold bg-gradient-to-r 
-          from-red-500 via-orange-500 to-amber-600 bg-clip-text text-transparent"
+          from-orange-300 via-orange-400 to-amber-500 bg-clip-text text-transparent"
           >
             Urgent Tasks
           </h1>
         </div>
-        <div className="flex items-center text-blue-600 cursor-pointer">
+        <div className="flex items-center text-blue-300 cursor-pointer">
           <span className="text-sm">View all</span>
           <span>
             <GoArrowUpRight />
@@ -57,17 +58,18 @@ const UrgentTasks = () => {
         </div>
       ) : tasks.length === 0 ? (
         <Card
-          shadow="sm"
-          className="rounded-md mb-4 p-6 flex flex-col 
-          items-center justify-center text-center gap-3 bg-amber-50"
+          shadow="lg"
+          className="rounded-xl border-none mb-4 p-6 flex 
+          flex-col items-center justify-center text-center gap-3 bg-gradient-to-tr
+                  from-gray-500 via-gray-300 to-gray-600"
         >
           <div className="p-3 rounded-full bg-amber-100">
             <BsFillExclamationCircleFill className="text-amber-600 text-3xl" />
           </div>
-          <h3 className="text-gray-800 font-semibold text-lg">
+          <h3 className="text-gray-900 font-semibold text-lg">
             No Urgent Tasks
           </h3>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-800 text-sm">
             You’re all caught up — nothing needs your immediate attention right
             now!
           </p>
@@ -79,14 +81,18 @@ const UrgentTasks = () => {
               {tasks.slice(0, 3).map((task) => (
                 <div key={task._id}>
                   <div
-                    className="rounded-xl shadow-sm bg-amber-50 
-                   border-l-4 border-amber-500
+                    className="rounded-xl shadow-sm bg-gradient-to-bl 
+                  from-orange-400 via-orange-200 to-gray-100
+                   border-l-8 border-orange-500
                    transition hover:shadow-md p-4"
                   >
                     {/* Title */}
-                    <h2 className="text-base font-semibold text-gray-800">
-                      {task.title}
-                    </h2>
+                    <div className="grid grid-cols-[auto,1fr] items-center gap-2">
+                      <RiFileWarningFill className="text-orange-600 text-lg" />
+                      <h2 className="text-base font-semibold text-gray-800 line-clamp-1">
+                        {task.title}
+                      </h2>
+                    </div>
 
                     {/* Description */}
                     <p className="text-sm text-gray-600 line-clamp-2">
@@ -117,14 +123,18 @@ const UrgentTasks = () => {
               {tasks.map((task) => (
                 <div key={task._id}>
                   <div
-                    className="rounded-xl shadow-sm bg-amber-50 
-                   border-l-4 border-amber-500
+                    className="rounded-xl shadow-sm bg-gradient-to-bl 
+                  from-orange-400 via-orange-200 to-gray-100
+                   border-l-5 border-orange-500
                    transition hover:shadow-md p-4"
                   >
                     {/* Title */}
-                    <h2 className="text-base font-semibold text-gray-800">
-                      {task.title}
-                    </h2>
+                    <div className="grid grid-cols-[auto,1fr] items-center gap-2">
+                      <RiFileWarningFill className="text-orange-600 text-lg" />
+                      <h2 className="text-base font-semibold text-gray-800 line-clamp-1">
+                        {task.title}
+                      </h2>
+                    </div>
 
                     {/* Description */}
                     <p className="text-sm text-gray-600 line-clamp-2">

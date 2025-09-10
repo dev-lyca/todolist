@@ -160,11 +160,6 @@ const MyTasks = () => {
         <div className="flex-shrink-0">
           <div className="flex gap-2">
             {!checked && (
-              // <FaPlus
-              //   size={30}
-              //   className="hidden sm:block text-blue-700 cursor-pointer text-xl pr-3"
-              //   onClick={onOpenAdd}
-              // />
               <div className="hidden lg:block items-center justify-center w-8 h-8 rounded-full ">
                 <FaPlus
                   size={30}
@@ -186,7 +181,7 @@ const MyTasks = () => {
             ) : (
               <FaTrash
                 size={30}
-                className="text-red-500 cursor-pointer text-xl pr-3"
+                className="text-orange-500 cursor-pointer text-xl pr-3"
                 onClick={() => {
                   setChecked(false);
                   handleBulkDelete();
@@ -218,7 +213,8 @@ const MyTasks = () => {
               key={task._id}
               shadow="sm"
               radius="lg"
-              className="mb-3 border-l-4 border-orange-500 bg-orange-50 overflow-hidden text-white"
+              className="mb-3 border-l-5 border-gray-600 
+              bg-gradient-to-tr from-gray-300 via-gray-400 to-gray-500 overflow-hidden text-white"
             >
               <CardBody className="flex flex-row items-center justify-between p-4">
                 {checked && (
@@ -238,7 +234,7 @@ const MyTasks = () => {
                       {task.description}
                     </span>
                   </div>
-                  <small className="text-xs text-gray-700">
+                  <small className="text-xs text-gray-800">
                     {task.deadline
                       ? new Date(task.deadline).toLocaleDateString("en-US", {
                           month: "short",
@@ -253,7 +249,7 @@ const MyTasks = () => {
                   <DropdownTrigger>
                     <BsThreeDotsVertical
                       size={18}
-                      className="cursor-pointer text-gray-500 hover:text-amber-600"
+                      className="cursor-pointer text-gray-300 hover:text-gray-100"
                     />
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Task Actions">

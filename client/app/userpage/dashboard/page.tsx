@@ -6,47 +6,10 @@ import ProgressCards from "@/components/progress-cards";
 import UrgentTasks from "@/components/urgent-tasks";
 import { useUser } from "@/context/userContext";
 import { Card, Divider } from "@heroui/react";
-import { useEffect, useState } from "react";
-
-interface TaskCounts {
-  completed: number;
-  pending: number;
-  "in-progress": number;
-}
 
 const Dashboard = () => {
   const { user } = useUser();
   const firstName = user?.displayName?.split(" ")[0];
-  const [activeSection, setActiveSection] = useState<"pending" | "completed">(
-    "pending"
-  );
-  const [counts, setCounts] = useState<TaskCounts>({
-    completed: 0,
-    pending: 0,
-    "in-progress": 0,
-  });
-
-  const total = counts.completed + counts.pending + counts["in-progress"];
-
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/count`,
-          {
-            credentials: "include",
-          }
-        );
-        if (!res.ok) throw new Error("Failed to fetch counts");
-        const data: TaskCounts = await res.json();
-        setCounts(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchCounts();
-  }, []);
 
   return (
     <section className="mt-14 mb-14 overflow-x-hidden">
@@ -71,12 +34,16 @@ const Dashboard = () => {
 
       <Card
         shadow="md"
-        className="block lg:hidden rounded-t-full px-6 mt-5 mx-2 bg-gray-200"
+        className="block lg:hidden rounded-t-full px-6 mt-5 mx-2 
+        bg-gradient-to-b from-gray-400 to-gray-900"
       >
         <ProgressCards />
       </Card>
 
-      <div className="rounded-t-4xl rounded-b-md py-2 mt-5 mb-8 mx-2 p-2 bg-gray-200">
+      <div
+        className="rounded-t-xl rounded-b-md py-2 mt-5 mb-8 mx-2 p-2
+       bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700"
+      >
         <div className="py-5 p-4">
           <UrgentTasks />
           <Divider />

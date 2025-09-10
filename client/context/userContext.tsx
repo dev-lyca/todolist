@@ -1,5 +1,6 @@
 "use client";
 import { GoogleUser } from "@/types";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -17,6 +18,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<GoogleUser | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -30,9 +32,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (res.ok) {
           const data: GoogleUser = await res.json();
           setUser(data);
+        } else {
+          router.push("/login");
         }
       } catch (err) {
         console.error("Failed to fetch user:", err);
+        router.push("/login");
       }
     };
 

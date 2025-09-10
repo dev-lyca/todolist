@@ -42,9 +42,9 @@ const PendingToday = () => {
       <div className="flex justify-between items-center mb-2">
         <div>
           {" "}
-          <h1 className="text-xl font-bold text-gray-700">Pending Tasks</h1>
+          <h1 className="text-xl font-bold text-gray-100">Pending Tasks</h1>
         </div>
-        <div className="flex items-center text-blue-600 cursor-pointer">
+        <div className="flex items-center text-blue-300 cursor-pointer">
           <span className="text-sm">View all</span>
           <span>
             <GoArrowUpRight />
@@ -58,17 +58,18 @@ const PendingToday = () => {
         </div>
       ) : pending.length === 0 ? (
         <Card
-          shadow="sm"
-          className="rounded-md mb-4 p-6 flex flex-col 
-          items-center justify-center text-center gap-3 bg-gray-100"
+          shadow="lg"
+          className="rounded-xl border-none mb-4 p-6 flex 
+          flex-col items-center justify-center text-center gap-3 bg-gradient-to-tr
+                  from-gray-500 via-gray-300 to-gray-600"
         >
           <div className="p-3 rounded-full bg-gray-100">
             <BsFillClockFill className="text-gray-500 text-4xl" />
           </div>
-          <h3 className="text-gray-700 font-semibold text-lg">
+          <h3 className="text-gray-900 font-semibold text-lg">
             No Pending Tasks Today
           </h3>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-800 text-sm">
             Great job staying on track — nothing’s waiting for you right now!
           </p>
         </Card>
@@ -79,9 +80,10 @@ const PendingToday = () => {
               {pending.slice(0, 3).map((task) => (
                 <Card
                   key={task._id}
-                  className="h-[120px] p-4 rounded-xl shadow-sm bg-gray-100 
-                 border-l-4 border-gray-500 flex flex-col
-                 transition hover:shadow-md"
+                className="rounded-xl shadow-sm bg-gradient-to-bl 
+                  from-gray-400 via-gray-200 to-gray-100
+                   border-l-8 border-gray-500
+                   transition hover:shadow-md p-4"
                   as={Link}
                   href={`/userpage/task/${task._id}`}
                 >
@@ -123,8 +125,10 @@ const PendingToday = () => {
               {pending.map((task) => (
                 <div
                   key={task._id}
-                  className="rounded-xl shadow-sm bg-gray-100 
-      border-l-4 border-gray-500 transition hover:shadow-md p-4"
+                  className="rounded-xl shadow-sm bg-gradient-to-bl 
+                  from-gray-400 via-gray-200 to-gray-100
+                   border-l-5 border-gray-500
+                   transition hover:shadow-md p-4"
                 >
                   <div className="grid grid-cols-[auto,1fr] items-center gap-2">
                     <BsHourglassSplit className="text-gray-600 text-lg" />
@@ -136,25 +140,6 @@ const PendingToday = () => {
                   <p className="text-sm text-gray-600 mb-3 truncate">
                     {task.description}
                   </p>
-
-                  <div className="grid grid-cols-2 items-center text-xs mt-auto">
-                    <span
-                      className={`px-2 rounded-full font-medium justify-self-start ${
-                        task.priority === "Urgent"
-                          ? "bg-red-100 text-red-600"
-                          : task.priority === "Moderate"
-                            ? "bg-amber-100 text-amber-600"
-                            : "bg-blue-100 text-blue-600"
-                      }`}
-                    >
-                      {task.priority}
-                    </span>
-
-                    <span className="grid grid-flow-col auto-cols-max items-center gap-1 text-gray-500 justify-self-end">
-                      <BsFillCalendar2Fill className="text-emerald-600 text-sm" />
-                      {task.createdAt ? formatDate(task.createdAt) : "N/A"}
-                    </span>
-                  </div>
                 </div>
               ))}
             </div>

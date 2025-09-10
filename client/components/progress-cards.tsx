@@ -163,6 +163,7 @@ const ProgressCards = () => {
             value={loading ? 0 : completedPercent}
             showValueLabel={true}
             label="Completed"
+            className="text-white"
           />
         </div>
 
@@ -174,6 +175,7 @@ const ProgressCards = () => {
             value={loading ? 0 : inProgressPercent}
             showValueLabel={true}
             label="Ongoing"
+            className="text-white"
           />
         </div>
 
@@ -185,6 +187,7 @@ const ProgressCards = () => {
             value={loading ? 0 : pendingPercent}
             showValueLabel={true}
             label="Pending"
+            className="text-white"
           />
         </div>
       </div>
