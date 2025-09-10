@@ -32,8 +32,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (res.ok) {
           const data: GoogleUser = await res.json();
           setUser(data);
-        } else {
-          router.push("/login");
         }
       } catch (err) {
         console.error("Failed to fetch user:", err);
