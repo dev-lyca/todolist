@@ -24,7 +24,7 @@ app.use(
   cors({
     origin: [
       "https://tracktask-nggt.onrender.com",
-      "https://tracktask-five.vercel.app/",
+      "https://tracktask-five.vercel.app",
       "http://localhost:3000",
     ],
     credentials: true,
@@ -46,8 +46,8 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 3,
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
     },
   })
 );
