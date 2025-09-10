@@ -173,20 +173,20 @@ router.all("/api/pending", authMiddleware, async (req, res) => {
 
     const tasks = await Task.find({
       status: "Pending",
-      // $or: [
-      //   {
-      //     deadline: {
-      //       $gte: startOfDay,
-      //       $lte: endOfDay,
-      //     },
-      //   },
-      //   {
-      //     reminderAt: {
-      //       $gte: startOfDay,
-      //       $lte: endOfDay,
-      //     },
-      //   },
-      // ],
+      $or: [
+        {
+          deadline: {
+            $gte: startOfDay,
+            $lte: endOfDay,
+          },
+        },
+        {
+          reminderAt: {
+            $gte: startOfDay,
+            $lte: endOfDay,
+          },
+        },
+      ],
       user: req.user._id,
     });
 
