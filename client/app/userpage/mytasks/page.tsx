@@ -214,7 +214,7 @@ const MyTasks = () => {
               shadow="sm"
               radius="lg"
               className="mb-3 border-l-5 border-gray-600 
-              bg-gradient-to-tr from-gray-300 via-gray-400 to-gray-500 overflow-hidden text-white"
+              bg-gradient-to-tr from-gray-500 via-gray-400 to-gray-500 overflow-hidden text-white"
             >
               <CardBody className="flex flex-row items-center justify-between p-4">
                 {checked && (

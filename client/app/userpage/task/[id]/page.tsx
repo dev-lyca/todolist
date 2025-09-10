@@ -157,69 +157,58 @@ const Tasks = () => {
   if (!tasks) return <p>Task not found</p>;
 
   return (
-    <div className="mt-14 mb-14 sm:mt-12">
-      <Card
-        className="p-6"
-        style={{ backgroundColor: tasks.color || "#FFFFFF" }}
-      >
-        {paragraphs.map((text, i) => (
-          <div key={i}>
-            <CardHeader>
-              <div className="justify-between items-start w-full">
-                <div>
-                  {tasks.status === "Completed" ? (
-                    <Chip
-                      size="sm"
-                      color="success"
-                      className="mb-2 cursor-default"
-                    >
-                      {tasks.status}
-                    </Chip>
-                  ) : (
-                    <Dropdown size="sm" className="mb-2 items-center">
-                      <DropdownTrigger>
-                        <Chip
-                          size="sm"
-                          color={
-                            tasks.status === "In-progress"
-                              ? "primary"
-                              : "default"
-                          }
-                          className="mb-2 cursor-pointer"
-                        >
-                          {tasks.status}
-                        </Chip>
-                      </DropdownTrigger>
-
-                      <DropdownMenu
-                        aria-label="Task Status"
-                        onAction={(key) =>
-                          updateTask({ status: key as Task["status"] })
-                        }
+    <section className="mt-14 mx-auto mb-14 w-full h-full bg-gray-900">
+      <div>
+        <Card
+          className="p-6"
+          style={{ backgroundColor: tasks.color || "#FFFFFF" }}
+        >
+          {paragraphs.map((text, i) => (
+            <div key={i}>
+              <CardHeader>
+                <div className="justify-between items-start w-full">
+                  <div>
+                    {tasks.status === "Completed" ? (
+                      <Chip
+                        size="sm"
+                        color="success"
+                        className="mb-2 cursor-default"
                       >
-                        {tasks.status === "Pending"
-                          ? [
-                              <DropdownItem key="In-progress">
-                                <Chip
-                                  size="sm"
-                                  color="primary"
-                                  className="mb-2"
-                                >
-                                  In-progress
-                                </Chip>
-                              </DropdownItem>,
-                              <DropdownItem key="Completed">
-                                <Chip
-                                  size="sm"
-                                  color="success"
-                                  className="mb-2"
-                                >
-                                  Completed
-                                </Chip>
-                              </DropdownItem>,
-                            ]
-                          : tasks.status === "In-progress"
+                        {tasks.status}
+                      </Chip>
+                    ) : (
+                      <Dropdown size="sm" className="mb-2 items-center">
+                        <DropdownTrigger>
+                          <Chip
+                            size="sm"
+                            color={
+                              tasks.status === "In-progress"
+                                ? "primary"
+                                : "default"
+                            }
+                            className="mb-2 cursor-pointer"
+                          >
+                            {tasks.status}
+                          </Chip>
+                        </DropdownTrigger>
+
+                        <DropdownMenu
+                          aria-label="Task Status"
+                          onAction={(key) =>
+                            updateTask({ status: key as Task["status"] })
+                          }
+                        >
+                          {tasks.status === "Pending"
                             ? [
+                                <DropdownItem key="In-progress">
+                                  <Chip
+                                    size="sm"
+                                    color="primary"
+                                    className="mb-2"
+                                  >
+                                    In-progress
+                                  </Chip>
+                                </DropdownItem>,
                                 <DropdownItem key="Completed">
                                   <Chip
                                     size="sm"
@@ -230,137 +219,153 @@ const Tasks = () => {
                                   </Chip>
                                 </DropdownItem>,
                               ]
-                            : null}
-                      </DropdownMenu>
-                    </Dropdown>
-                  )}
+                            : tasks.status === "In-progress"
+                              ? [
+                                  <DropdownItem key="Completed">
+                                    <Chip
+                                      size="sm"
+                                      color="success"
+                                      className="mb-2"
+                                    >
+                                      Completed
+                                    </Chip>
+                                  </DropdownItem>,
+                                ]
+                              : null}
+                        </DropdownMenu>
+                      </Dropdown>
+                    )}
 
-                  <h1
+                    <h1
+                      ref={(el) => {
+                        if (el && editingIndex === -1) {
+                          editableRefs.current[-1] = el;
+                        }
+                      }}
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="text-2xl font-bold text-[#1A4A96] cursor-text outline-none"
+                      onFocus={(e) => {
+                        setEditingIndex(-1);
+                        focusToEnd(e.currentTarget);
+                      }}
+                      onKeyDown={(e) => handleKeyDown(e, -1)}
+                    >
+                      {tasks.title}
+                    </h1>
+
+                    <small>
+                      {new Intl.DateTimeFormat("en-US", {
+                        weekday: "long",
+                        month: "long",
+                        day: "2-digit",
+                        year: "numeric",
+                      }).format(new Date(tasks.createdAt ?? ""))}
+                      {" | "}
+                      {paragraphs.join(" ").length} characters
+                    </small>
+                  </div>
+
+                  <div className="flex gap-4 text-right text-xs items-center">
+                    <div className="flex items-center gap-1">
+                      <FaRegCalendarAlt className="text-gray-500" size={16} />
+                      <span>
+                        {tasks.deadline
+                          ? new Date(tasks.deadline).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              }
+                            )
+                          : "No deadline"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <IoIosAlarm className="text-gray-500" size={16} />
+                      <span>
+                        {tasks.reminderAt
+                          ? new Date(tasks.reminderAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              }
+                            )
+                          : "No reminder"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardBody>
+                <div className="relative w-[290px] md:w-[400px] lg:w-[500px]">
+                  <div
                     ref={(el) => {
-                      if (el && editingIndex === -1) {
-                        editableRefs.current[-1] = el;
-                      }
+                      editableRefs.current[i] = el;
                     }}
                     contentEditable
                     suppressContentEditableWarning
-                    className="text-2xl font-bold text-[#1A4A96] cursor-text outline-none"
+                    className=" mt-2 text-base 
+                  text-gray-700 outline-none cursor-text"
                     onFocus={(e) => {
-                      setEditingIndex(-1);
+                      setEditingIndex(i);
                       focusToEnd(e.currentTarget);
                     }}
-                    onKeyDown={(e) => handleKeyDown(e, -1)}
+                    onKeyDown={(e) => handleKeyDown(e, i)}
                   >
-                    {tasks.title}
-                  </h1>
-
-                  <small>
-                    {new Intl.DateTimeFormat("en-US", {
-                      weekday: "long",
-                      month: "long",
-                      day: "2-digit",
-                      year: "numeric",
-                    }).format(new Date(tasks.createdAt ?? ""))}
-                    {" | "}
-                    {paragraphs.join(" ").length} characters
-                  </small>
-                </div>
-
-                <div className="flex gap-4 text-right text-xs items-center">
-                  <div className="flex items-center gap-1">
-                    <FaRegCalendarAlt className="text-gray-500" size={16} />
-                    <span>
-                      {tasks.deadline
-                        ? new Date(tasks.deadline).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })
-                        : "No deadline"}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-1">
-                    <IoIosAlarm className="text-gray-500" size={16} />
-                    <span>
-                      {tasks.reminderAt
-                        ? new Date(tasks.reminderAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            }
-                          )
-                        : "No reminder"}
-                    </span>
+                    {text}
                   </div>
                 </div>
-              </div>
-            </CardHeader>
-
-            <CardBody>
-              <div className="relative w-[290px] md:w-[400px] lg:w-[500px]">
-                <div
-                  ref={(el) => {
-                    editableRefs.current[i] = el;
-                  }}
-                  contentEditable
-                  suppressContentEditableWarning
-                  className=" mt-2 text-base 
-                  text-gray-700 outline-none cursor-text"
-                  onFocus={(e) => {
-                    setEditingIndex(i);
-                    focusToEnd(e.currentTarget);
-                  }}
-                  onKeyDown={(e) => handleKeyDown(e, i)}
-                >
-                  {text}
-                </div>
-              </div>
-            </CardBody>
-          </div>
-        ))}
-        {editingIndex !== null && (
-          <CardFooter className="mt-10">
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-4">
-                <Tooltip content="Select theme" showArrow={true}>
-                  <IoColorPalette
-                    size={30}
-                    className="text-gray-700 font-bold cursor-pointer"
-                    onClick={onOpenTheme}
-                  />
-                </Tooltip>
-                <Tooltip content="Change reminder" showArrow={true}>
-                  <IoIosAlarm
-                    size={30}
-                    className="text-gray-700 font-bold cursor-pointer"
-                    onClick={onOpenReminder}
-                  />
-                </Tooltip>
-              </div>
-
-              <FaCheckCircle
-                size={30}
-                className="text-gray-700 font-semibold shadow-md hover:shadow-lg"
-                onClick={handleSave}
-              />
+              </CardBody>
             </div>
-          </CardFooter>
-        )}
-      </Card>
+          ))}
+          {editingIndex !== null && (
+            <CardFooter className="mt-10">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-4">
+                  <Tooltip content="Select theme" showArrow={true}>
+                    <IoColorPalette
+                      size={30}
+                      className="text-gray-700 font-bold cursor-pointer"
+                      onClick={onOpenTheme}
+                    />
+                  </Tooltip>
+                  <Tooltip content="Change reminder" showArrow={true}>
+                    <IoIosAlarm
+                      size={30}
+                      className="text-gray-700 font-bold cursor-pointer"
+                      onClick={onOpenReminder}
+                    />
+                  </Tooltip>
+                </div>
 
-      <ThemeModal
-        isOpen={isThemeOpen}
-        onOpenChange={onThemeOpenChange}
-        id={id}
-      />
-      <CalendarModal
-        isOpen={isReminderOpen}
-        onOpenChange={onReminderOpenChange}
-        id={id}
-      />
-    </div>
+                <FaCheckCircle
+                  size={30}
+                  className="text-gray-700 font-semibold shadow-md hover:shadow-lg"
+                  onClick={handleSave}
+                />
+              </div>
+            </CardFooter>
+          )}
+        </Card>
+
+        <ThemeModal
+          isOpen={isThemeOpen}
+          onOpenChange={onThemeOpenChange}
+          id={id}
+        />
+        <CalendarModal
+          isOpen={isReminderOpen}
+          onOpenChange={onReminderOpenChange}
+          id={id}
+        />
+      </div>
+    </section>
   );
 };
 

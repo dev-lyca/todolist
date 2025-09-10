@@ -13,7 +13,7 @@ export default function UserLayout({
 }) {
   return (
     <UserProvider>
-      <div className="flex h-screen text-[#4a3f35]">
+      <div className="flex h-screen text-[#4a3f35] bg-gray-900">
         <aside className="fixed top-0 left-0 h-screen w-64 bg-[#f5ebe0] shadow-md hidden lg:block">
           <Sidebar />
         </aside>
@@ -23,7 +23,7 @@ export default function UserLayout({
             <Navbar />
           </div>
 
-          <main className="flex-1 overflow-y-auto px-4 py-6 w-full bg-gray-900">
+          <main className="flex-1 overflow-y-hidden px-4 py-6 w-full ">
             <div className="">{children}</div>
           </main>
         </div>
