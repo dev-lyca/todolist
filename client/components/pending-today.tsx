@@ -1,5 +1,6 @@
 "use client";
 
+import { useHandleRedirect } from "@/hooks/useHandleRedirect";
 import { Task } from "@/types";
 import { formatDate } from "@/utils/date";
 import { Card, CardFooter, CircularProgress } from "@heroui/react";
@@ -14,12 +15,13 @@ import { GoArrowUpRight } from "react-icons/go";
 
 const PendingToday = () => {
   const [pending, setPending] = useState<Task[] | null>(null);
+  const handleRedirect = useHandleRedirect();
 
   useEffect(() => {
     const fetchPending = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/pending`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/pending-today`,
           {
             credentials: "include",
           }
@@ -44,7 +46,12 @@ const PendingToday = () => {
           {" "}
           <h1 className="text-xl font-bold text-gray-100">Pending Tasks</h1>
         </div>
-        <div className="flex items-center text-blue-300 cursor-pointer">
+        <div
+          className="flex items-center text-blue-300 cursor-pointer"
+          onClick={() => {
+            handleRedirect("pending");
+          }}
+        >
           <span className="text-sm">View all</span>
           <span>
             <GoArrowUpRight />
@@ -80,7 +87,7 @@ const PendingToday = () => {
               {pending.slice(0, 3).map((task) => (
                 <Card
                   key={task._id}
-                className="rounded-xl shadow-sm bg-gradient-to-bl 
+                  className="rounded-xl shadow-sm bg-gradient-to-bl 
                   from-gray-400 via-gray-200 to-gray-100
                    border-l-8 border-gray-500
                    transition hover:shadow-md p-4"
@@ -113,7 +120,7 @@ const PendingToday = () => {
 
                     <span className="flex items-center gap-1 text-gray-500">
                       <BsFillCalendar2Fill className="text-emerald-600 text-sm" />
-                      {task.createdAt ? formatDate(task.createdAt) : "N/A"}
+                      {task.deadline ? formatDate(task.deadline) : "N/A"}
                     </span>
                   </CardFooter>
                 </Card>

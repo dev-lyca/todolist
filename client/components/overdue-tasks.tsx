@@ -13,7 +13,7 @@ const OverdueTasks = () => {
     const fetchtasks = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/overdue`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/overdue-today`,
           {
             credentials: "include",
           }
@@ -61,7 +61,7 @@ const OverdueTasks = () => {
             <BsFillExclamationCircleFill className="text-red-600 text-3xl" />
           </div>
           <h3 className="text-gray-900 font-semibold text-lg">
-            No Overdue Tasks
+            No Overdue Tasks Today
           </h3>
           <p className="text-gray-800 text-sm">
             You’ve cleared all past deadlines — nothing is hanging over your

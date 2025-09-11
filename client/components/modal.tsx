@@ -130,11 +130,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
       title: "Minimal Accents",
       colors: [
         "#FFF7ED", // warm ivory
-        "#FEF3C7", // soft amber cream
-        "#FDE68A", // muted pastel amber
-        "#FBCFE8", // nude pink
         "#E5E7EB", // soft gray
         "#D1D5DB", // cool neutral gray
+        "#C7A499", // muted rose beige (repeat for balance)
+        "#A68A79", // dusty cocoa
+        "#8B5E3C", // deep caramel
       ],
     },
   ];

@@ -3,6 +3,7 @@ import CalendarModal from "@/components/calendar-modal";
 import ThemeModal from "@/components/theme-modal";
 import { Task } from "@/types";
 import {
+  addToast,
   Card,
   CardBody,
   CardFooter,
@@ -18,7 +19,11 @@ import {
 } from "@heroui/react";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FaCheckCircle, FaRegCalendarAlt } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaExclamationTriangle,
+  FaRegCalendarAlt,
+} from "react-icons/fa";
 import { IoIosAlarm } from "react-icons/io";
 import { IoColorPalette } from "react-icons/io5";
 
@@ -62,6 +67,27 @@ const Tasks = () => {
       clearInterval(interval);
     };
   }, [id]);
+
+  useEffect(() => {
+    if (tasks && tasks.status != "Completed") {
+      if (tasks && tasks.deadline) {
+        const now = new Date();
+        const deadlineDate = new Date(tasks.deadline);
+
+        if (deadlineDate < now) {
+          addToast({
+            title: "⏰ Overdue Task",
+            description:
+              "Wag kang tamad! Yung task mo, overdue na. Mark it as completed or else babatukan kita!",
+            color: "danger",
+            variant: "solid",
+            icon: <FaExclamationTriangle className="w-5 h-5 text-red-500" />,
+            timeout: 5000,
+          });
+        }
+      }
+    }
+  }, [tasks, addToast]);
 
   const {
     isOpen: isThemeOpen,
@@ -254,7 +280,7 @@ const Tasks = () => {
                       {tasks.title}
                     </h1>
 
-                    <small>
+                    <small className="text-gray-900">
                       {new Intl.DateTimeFormat("en-US", {
                         weekday: "long",
                         month: "long",
@@ -268,8 +294,8 @@ const Tasks = () => {
 
                   <div className="flex gap-4 text-right text-xs items-center">
                     <div className="flex items-center gap-1">
-                      <FaRegCalendarAlt className="text-gray-500" size={16} />
-                      <span>
+                      <FaRegCalendarAlt className="text-gray-900" size={16} />
+                      <span className="text-gray-900">
                         {tasks.deadline
                           ? new Date(tasks.deadline).toLocaleDateString(
                               "en-US",
@@ -284,8 +310,8 @@ const Tasks = () => {
                     </div>
 
                     <div className="flex items-center gap-1">
-                      <IoIosAlarm className="text-gray-500" size={16} />
-                      <span>
+                      <IoIosAlarm className="text-gray-900" size={16} />
+                      <span className="text-gray-900">
                         {tasks.reminderAt
                           ? new Date(tasks.reminderAt).toLocaleDateString(
                               "en-US",

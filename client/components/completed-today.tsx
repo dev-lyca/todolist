@@ -13,7 +13,7 @@ const CompletedToday = () => {
     const fetchtasks = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/urgent`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/completed-today`,
           {
             credentials: "include",
           }
@@ -61,11 +61,11 @@ const CompletedToday = () => {
             <BsFillCheckCircleFill className="text-green-500 text-3xl" />
           </div>
           <h3 className="text-gray-900 font-semibold text-lg">
-            No Completed Tasks
+            No Completed Tasks Today
           </h3>
           <p className="text-gray-800 text-sm">
-            You’ve cleared all past deadlines — nothing is hanging over your
-            head!
+            You haven’t marked anything as completed yet. Once you finish a
+            task, it will show up here.
           </p>
         </Card>
       ) : (

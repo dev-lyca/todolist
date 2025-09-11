@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
@@ -30,6 +30,7 @@ const MyTasks = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  const { status } = useParams<{ status: string }>();
 
   const {
     isOpen: isAddOpenn,
@@ -50,7 +51,7 @@ const MyTasks = () => {
     const fetchTasks = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/all-tasks`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/tasks/${status}`,
           {
             credentials: "include",
           }
@@ -162,7 +163,7 @@ const MyTasks = () => {
           />
           <Dropdown>
             <DropdownTrigger>
-              <FaFilter size={28} className="text-gray-400 cursor-pointer" />
+              <FaFilter size={28} className="text-gray-300 cursor-pointer" />
             </DropdownTrigger>
             <DropdownMenu aria-label="Actions" onAction={handleRedirect}>
               <DropdownItem key="pending" color="default">
@@ -222,14 +223,14 @@ const MyTasks = () => {
       <div className="mt-6">
         {filteredTasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-80">
-            <div className="p-6 rounded-full bg-red-50">
+            <div className="p-6 rounded-full bg-gradient-to-tr from-gray-400 to-gray-500">
               <MdOutlineChecklistRtl
                 size={72}
-                className="text-amber-600 drop-shadow-sm"
+                className="text-gray-200 drop-shadow-sm"
               />
             </div>
 
-            <p className="mt-2 text-lg font-semibold text-gray-700">
+            <p className="mt-2 text-lg font-semibold text-gray-100">
               No tasks yet
             </p>
             <p className="text-sm text-gray-400">Start by adding a new task</p>

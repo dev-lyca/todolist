@@ -2,19 +2,21 @@
 
 import { Task } from "@/types";
 import { Card, CircularProgress } from "@heroui/react";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
 import { GoArrowUpRight } from "react-icons/go";
 import { RiFileWarningFill } from "react-icons/ri";
 
 const UrgentTasks = () => {
   const [tasks, settasks] = useState<Task[] | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchtasks = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/urgent`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/urgent-today`,
           {
             credentials: "include",
           }
@@ -32,6 +34,10 @@ const UrgentTasks = () => {
     fetchtasks();
   }, []);
 
+  const handleRedirect = (key: React.Key) => {
+    router.push(`/userpage/mytask/${key}`);
+  };
+
   return (
     <div className="mt-4">
       <div className="flex justify-between items-center mb-2">
@@ -44,7 +50,12 @@ const UrgentTasks = () => {
             Urgent Tasks
           </h1>
         </div>
-        <div className="flex items-center text-blue-300 cursor-pointer">
+        <div
+          className="flex items-center text-blue-300 cursor-pointer "
+          onClick={() => {
+            handleRedirect("urgent");
+          }}
+        >
           <span className="text-sm">View all</span>
           <span>
             <GoArrowUpRight />
@@ -67,7 +78,7 @@ const UrgentTasks = () => {
             <BsFillExclamationCircleFill className="text-amber-600 text-3xl" />
           </div>
           <h3 className="text-gray-900 font-semibold text-lg">
-            No Urgent Tasks
+            No Urgent Tasks Today
           </h3>
           <p className="text-gray-800 text-sm">
             You’re all caught up — nothing needs your immediate attention right

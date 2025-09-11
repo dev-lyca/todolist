@@ -50,11 +50,11 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
       title: "Minimal Accents",
       colors: [
         "#FFF7ED", // warm ivory
-        "#FEF3C7", // soft amber cream
-        "#FDE68A", // muted pastel amber
-        "#FBCFE8", // nude pink
         "#E5E7EB", // soft gray
         "#D1D5DB", // cool neutral gray
+        "#C7A499", // muted rose beige (repeat for balance)
+        "#A68A79", // dusty cocoa
+        "#8B5E3C", // deep caramel
       ],
     },
   ];
@@ -107,7 +107,7 @@ const ThemeModal: React.FC<ThemeModalProps> = ({
                   key={i}
                   className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6"
                 >
-                  <span className="w-full sm:w-32 font-medium text-gray-700 text-sm sm:text-base">
+                  <span className="w-full sm:w-32 font-medium text-gray-300 text-sm sm:text-base">
                     {group.title}
                   </span>
 
