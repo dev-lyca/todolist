@@ -1,5 +1,6 @@
 "use client";
 
+import { useHandleRedirect } from "@/hooks/useHandleRedirect";
 import { Task } from "@/types";
 import { Card, CircularProgress } from "@heroui/react";
 import { useEffect, useState } from "react";
@@ -8,7 +9,7 @@ import { GoArrowUpRight } from "react-icons/go";
 
 const OverdueTasks = () => {
   const [tasks, settasks] = useState<Task[] | null>(null);
-
+  const handleRedirect = useHandleRedirect();
   useEffect(() => {
     const fetchtasks = async () => {
       try {
@@ -38,7 +39,12 @@ const OverdueTasks = () => {
           {" "}
           <h1 className="text-xl font-bold text-red-500">Overdue Tasks</h1>
         </div>
-        <div className="flex items-center text-blue-300 cursor-pointer">
+        <div
+          className="flex items-center text-blue-300 cursor-pointer"
+          onClick={() => {
+            handleRedirect("overdue");
+          }}
+        >
           <span className="text-sm">View all</span>
           <span>
             <GoArrowUpRight />
@@ -107,7 +113,7 @@ const OverdueTasks = () => {
           </div>
           <div className="block lg:hidden mb-4">
             <div className="h-[150px] overflow-y-auto space-y-4 scrollbar-hide">
-              {tasks.map((task) => (
+              {tasks.slice(0, 5).map((task) => (
                 <div key={task._id}>
                   <div
                     className="rounded-xl shadow-sm bg-gradient-to-bl 

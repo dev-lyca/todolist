@@ -1,5 +1,6 @@
 "use client";
 
+import { useHandleRedirect } from "@/hooks/useHandleRedirect";
 import { Task } from "@/types";
 import { Card, CircularProgress } from "@heroui/react";
 import { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ import { GoArrowUpRight } from "react-icons/go";
 
 const CompletedToday = () => {
   const [tasks, settasks] = useState<Task[] | null>(null);
+  const handleRedirect = useHandleRedirect();
 
   useEffect(() => {
     const fetchtasks = async () => {
@@ -38,7 +40,12 @@ const CompletedToday = () => {
           {" "}
           <h1 className="text-xl font-bold text-green-400">Completed Tasks</h1>
         </div>
-        <div className="flex items-center text-blue-300 cursor-pointer">
+        <div
+          className="flex items-center text-blue-300 cursor-pointer"
+          onClick={() => {
+            handleRedirect("completed");
+          }}
+        >
           <span className="text-sm">View all</span>
           <span>
             <GoArrowUpRight />

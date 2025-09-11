@@ -1,16 +1,15 @@
 "use client";
 
+import { useHandleRedirect } from "@/hooks/useHandleRedirect";
 import { Task } from "@/types";
 import { Card, CircularProgress } from "@heroui/react";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
 import { GoArrowUpRight } from "react-icons/go";
 import { RiFileWarningFill } from "react-icons/ri";
 
 const UrgentTasks = () => {
   const [tasks, settasks] = useState<Task[] | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchtasks = async () => {
@@ -34,9 +33,7 @@ const UrgentTasks = () => {
     fetchtasks();
   }, []);
 
-  const handleRedirect = (key: React.Key) => {
-    router.push(`/userpage/mytask/${key}`);
-  };
+  const handleRedirect = useHandleRedirect();
 
   return (
     <div className="mt-4">
