@@ -163,7 +163,7 @@ router.delete("/api/delete/tasks", async (req, res) => {
 });
 
 //fetch tasks depends on Pending status and createdAt === date today
-router.all("/api/pending", authMiddleware, async (req, res) => {
+router.get("/api/pending-today", authMiddleware, async (req, res) => {
   try {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -197,7 +197,7 @@ router.all("/api/pending", authMiddleware, async (req, res) => {
   }
 });
 
-router.all("/api/completed", authMiddleware, async (req, res) => {
+router.get("/api/completed-today", authMiddleware, async (req, res) => {
   try {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -222,7 +222,7 @@ router.all("/api/completed", authMiddleware, async (req, res) => {
 });
 
 //urgent tasks logic fetch
-router.all("/api/urgent", authMiddleware, async (req, res) => {
+router.get("/api/urgent-today", authMiddleware, async (req, res) => {
   try {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -258,7 +258,7 @@ router.all("/api/urgent", authMiddleware, async (req, res) => {
 });
 
 //overdue tasks
-router.all("/api/overdue", authMiddleware, async (req, res) => {
+router.get("/api/overdue-today", authMiddleware, async (req, res) => {
   try {
     const now = new Date();
 
@@ -271,6 +271,35 @@ router.all("/api/overdue", authMiddleware, async (req, res) => {
     res.json(tasks);
   } catch (err) {
     console.error("Error fetching overdue tasks:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//pending tasks
+router.get("/api/tasks/:status", authMiddleware, async (req, res) => {
+  try {
+    let { status } = req.params;
+    const now = new Date();
+
+    if (status === "in-progress") {
+      status = "In-progress";
+    } else {
+      status = status.charAt(0).toUpperCase() + status.slice(1);
+    }
+
+    let filter = { user: req.user._id };
+
+    if (status === "Overdue") {
+      filter.deadline = { $lte: now };
+      filter.status = { $ne: "Completed" };
+    } else {
+      filter.status = status;
+    }
+
+    const tasks = await Task.find(filter);
+    res.json(tasks);
+  } catch (err) {
+    console.error("Error fetching pending tasks:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
