@@ -93,6 +93,20 @@ router.patch("/api/tasks/:id", authMiddleware, async (req, res) => {
       task[update] = req.body[update];
     });
 
+    if (task.reminderAt && task.deadline) {
+      const reminderDate = new Date(task.reminderAt);
+      const deadlineDate = new Date(task.deadline);
+      const now = new Date();
+
+      if (reminderDate > deadlineDate || reminderDate < now) {
+        return res.status(400).json({
+          error: "Invalid reminder date",
+          description:
+            "Reminder date shouldn’t be greater than the deadline and shouldn’t be set in the past. Please try again.",
+        });
+      }
+    }
+
     await task.save();
     res.json(task);
   } catch (error) {
