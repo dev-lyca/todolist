@@ -222,14 +222,14 @@ const MyTasks = () => {
       <div className="mt-6">
         {filteredTasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-80">
-            <div className="p-6 rounded-full bg-red-50">
+            <div className="p-6 rounded-full bg-gradient-to-tr from-gray-400 to-gray-500">
               <MdOutlineChecklistRtl
                 size={72}
-                className="text-amber-600 drop-shadow-sm"
+                className="text-gray-200 drop-shadow-sm"
               />
             </div>
 
-            <p className="mt-2 text-lg font-semibold text-gray-700">
+            <p className="mt-2 text-lg font-semibold text-gray-100">
               No tasks yet
             </p>
             <p className="text-sm text-gray-400">Start by adding a new task</p>
@@ -241,7 +241,7 @@ const MyTasks = () => {
               shadow="sm"
               radius="lg"
               className="mb-3 border-l-5 border-gray-600 
-              bg-gradient-to-tr from-gray-500 via-gray-400 to-gray-500 overflow-hidden text-white"
+              bg-gradient-to-tr from-gray-800  to-gray-800 overflow-hidden text-white"
             >
               <CardBody className="flex flex-row items-center justify-between p-4">
                 {checked && (
@@ -254,14 +254,14 @@ const MyTasks = () => {
 
                 <div className="flex-1 break-words">
                   <div>
-                    <h1 className="text-md font-semibold text-gray-800 truncate">
+                    <h1 className="text-md font-semibold text-gray-300 truncate uppercase">
                       {task.title}
                     </h1>
-                    <span className="text-sm text-gray-900 font-light line-clamp-1">
+                    <span className="text-sm text-gray-200 font-light line-clamp-1">
                       {task.description}
                     </span>
                   </div>
-                  <small className="text-xs text-gray-800">
+                  <small className="text-xs font-thin text-gray-200 mt-2">
                     {task.deadline
                       ? new Date(task.deadline).toLocaleDateString("en-US", {
                           month: "short",

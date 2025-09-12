@@ -18,3 +18,8 @@ export const formatDate = (dateString: string | Date | null): string => {
     year: "numeric",
   });
 };
+
+
+export function formatDateToYMD(date: Date) {
+  return date.toLocaleDateString("en-CA"); 
+}

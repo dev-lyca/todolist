@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation"; // ✅ import hook
 import { FaCalendarAlt, FaHome, FaList, FaPlus, FaTasks } from "react-icons/fa";
 import TaskModal from "./modal";
+import { MdTimer } from "react-icons/md";
 
 export default function MobileFooterNav() {
   const {
@@ -25,6 +26,11 @@ export default function MobileFooterNav() {
       href: "/userpage/mytasks",
       label: "My Tasks",
       icon: <FaTasks className="text-xl" />,
+    },
+    {
+      href: "/userpage/timer",
+      label: "Timer",
+      icon: <MdTimer className="text-xl" />,
     },
   ];
 

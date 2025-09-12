@@ -35,14 +35,14 @@ const Dashboard = () => {
       <Card
         shadow="md"
         className="block lg:hidden rounded-t-full px-6 mt-5 mx-2 
-        bg-gradient-to-b from-gray-400 to-gray-900"
+        bg-gradient-to-b from-gray-700 to-gray-900"
       >
         <ProgressCards />
       </Card>
 
       <div
         className="rounded-t-xl rounded-b-md py-2 mt-5 mb-8 mx-2 p-2
-       bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700"
+       bg-gradient-to-b from-gray-900 via-gray-800 to-gray-800"
       >
         <div className="py-5 p-4">
           <UrgentTasks />

@@ -194,73 +194,94 @@ const Tasks = () => {
               <CardHeader>
                 <div className="justify-between items-start w-full">
                   <div>
-                    {tasks.status === "Completed" ? (
-                      <Chip
-                        size="sm"
-                        color="success"
-                        className="mb-2 cursor-default"
-                      >
-                        {tasks.status}
-                      </Chip>
-                    ) : (
-                      <Dropdown size="sm" className="mb-2 items-center">
-                        <DropdownTrigger>
+                    <div className="flex gap-2">
+                      <div>
+                        {tasks.status === "Completed" ? (
                           <Chip
                             size="sm"
-                            color={
-                              tasks.status === "In-progress"
-                                ? "primary"
-                                : "default"
-                            }
-                            className="mb-2 cursor-pointer"
+                            variant="solid"
+                            color="success"
+                            className="mb-2 cursor-default"
                           >
                             {tasks.status}
                           </Chip>
-                        </DropdownTrigger>
+                        ) : (
+                          <Dropdown size="sm" className="mb-2 items-center">
+                            <DropdownTrigger>
+                              <Chip
+                                size="sm"
+                                color={
+                                  tasks.status === "In-progress"
+                                    ? "primary"
+                                    : "default"
+                                }
+                                className="mb-2 cursor-pointer"
+                              >
+                                {tasks.status}
+                              </Chip>
+                            </DropdownTrigger>
 
-                        <DropdownMenu
-                          aria-label="Task Status"
-                          onAction={(key) =>
-                            updateTask({ status: key as Task["status"] })
-                          }
-                        >
-                          {tasks.status === "Pending"
-                            ? [
-                                <DropdownItem key="In-progress">
-                                  <Chip
-                                    size="sm"
-                                    color="primary"
-                                    className="mb-2"
-                                  >
-                                    In-progress
-                                  </Chip>
-                                </DropdownItem>,
-                                <DropdownItem key="Completed">
-                                  <Chip
-                                    size="sm"
-                                    color="success"
-                                    className="mb-2"
-                                  >
-                                    Completed
-                                  </Chip>
-                                </DropdownItem>,
-                              ]
-                            : tasks.status === "In-progress"
-                              ? [
-                                  <DropdownItem key="Completed">
-                                    <Chip
-                                      size="sm"
-                                      color="success"
-                                      className="mb-2"
-                                    >
-                                      Completed
-                                    </Chip>
-                                  </DropdownItem>,
-                                ]
-                              : null}
-                        </DropdownMenu>
-                      </Dropdown>
-                    )}
+                            <DropdownMenu
+                              aria-label="Task Status"
+                              onAction={(key) =>
+                                updateTask({ status: key as Task["status"] })
+                              }
+                            >
+                              {tasks.status === "Pending"
+                                ? [
+                                    <DropdownItem key="In-progress">
+                                      <Chip
+                                        size="sm"
+                                        color="primary"
+                                        className="mb-2"
+                                      >
+                                        In-progress
+                                      </Chip>
+                                    </DropdownItem>,
+                                    <DropdownItem key="Completed">
+                                      <Chip
+                                        size="sm"
+                                        color="success"
+                                        className="mb-2"
+                                      >
+                                        Completed
+                                      </Chip>
+                                    </DropdownItem>,
+                                  ]
+                                : tasks.status === "In-progress"
+                                  ? [
+                                      <DropdownItem key="Completed">
+                                        <Chip
+                                          size="sm"
+                                          color="success"
+                                          className="mb-2"
+                                        >
+                                          Completed
+                                        </Chip>
+                                      </DropdownItem>,
+                                    ]
+                                  : null}
+                            </DropdownMenu>
+                          </Dropdown>
+                        )}
+                      </div>
+                      <Chip
+                        size="sm"
+                        variant="solid"
+                        color="secondary"
+                        className="mb-2 cursor-default"
+                      >
+                        {tasks.priority}
+                      </Chip>
+                      <Chip
+                        size="sm"
+                        variant="solid"
+                        color="default"
+                        className="mb-2 cursor-default"
+                      >
+                        {tasks.category}
+                      </Chip>
+                    </div>
 
                     <h1
                       ref={(el) => {
@@ -270,7 +291,7 @@ const Tasks = () => {
                       }}
                       contentEditable
                       suppressContentEditableWarning
-                      className="text-2xl font-bold text-[#1A4A96] cursor-text outline-none"
+                      className="text-2xl font-bold text-[#1A4A96] cursor-text outline-none uppercase"
                       onFocus={(e) => {
                         setEditingIndex(-1);
                         focusToEnd(e.currentTarget);
@@ -286,7 +307,7 @@ const Tasks = () => {
                         month: "long",
                         day: "2-digit",
                         year: "numeric",
-                      }).format(new Date(tasks.createdAt ?? ""))}
+                      }).format(new Date(tasks.updatedAt ?? ""))}
                       {" | "}
                       {paragraphs.join(" ").length} characters
                     </small>
@@ -294,7 +315,9 @@ const Tasks = () => {
 
                   <div className="flex gap-4 text-right text-xs items-center">
                     <div className="flex items-center gap-1">
-                      <FaRegCalendarAlt className="text-gray-900" size={16} />
+                      <Tooltip content="Deadline" showArrow={true}>
+                        <FaRegCalendarAlt className="text-gray-900" size={15} />
+                      </Tooltip>
                       <span className="text-gray-900">
                         {tasks.deadline
                           ? new Date(tasks.deadline).toLocaleDateString(
@@ -310,7 +333,9 @@ const Tasks = () => {
                     </div>
 
                     <div className="flex items-center gap-1">
-                      <IoIosAlarm className="text-gray-900" size={16} />
+                      <Tooltip content="Reminder" showArrow={true}>
+                        <IoIosAlarm className="text-gray-900" size={16} />
+                      </Tooltip>
                       <span className="text-gray-900">
                         {tasks.reminderAt
                           ? new Date(tasks.reminderAt).toLocaleDateString(
@@ -372,7 +397,7 @@ const Tasks = () => {
 
                 <FaCheckCircle
                   size={30}
-                  className="text-gray-700 font-semibold shadow-md hover:shadow-lg"
+                  className="text-gray-700 font-semibold "
                   onClick={handleSave}
                 />
               </div>

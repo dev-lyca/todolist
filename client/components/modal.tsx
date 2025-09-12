@@ -221,6 +221,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
                   onChange={(e) => setDeadline(e.target.value)}
                   variant="bordered"
                   radius="lg"
+                  min={new Date().toISOString().split("T")[0]} // 🔹 disable past dates
                 />
                 <Input
                   label="Reminder"
@@ -229,8 +230,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose }) => {
                   onChange={(e) => setReminderAt(e.target.value)}
                   variant="bordered"
                   radius="lg"
+                  min={new Date().toISOString().split("T")[0]} // 🔹 no past dates
+                  max={deadline || undefined} // 🔹 not beyond deadline
                 />
               </div>
+
               <Divider />
               <h3>Choose Theme</h3>
               <Accordion isCompact variant="light" className="mt-0">

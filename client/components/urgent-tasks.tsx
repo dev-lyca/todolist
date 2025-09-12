@@ -69,7 +69,7 @@ const UrgentTasks = () => {
           shadow="lg"
           className="rounded-xl border-none mb-4 p-6 flex 
           flex-col items-center justify-center text-center gap-3 bg-gradient-to-tr
-                  from-gray-500 via-gray-300 to-gray-600"
+                  from-gray-700 via-gray-800 to-gray-600"
         >
           <div className="p-3 rounded-full bg-amber-100">
             <BsFillExclamationCircleFill className="text-amber-600 text-3xl" />

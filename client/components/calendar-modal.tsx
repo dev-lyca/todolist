@@ -1,5 +1,7 @@
 "use client";
+import { formatDateToYMD } from "@/utils/date";
 import {
+  addToast,
   Button,
   Calendar,
   DateValue,
@@ -9,8 +11,9 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@heroui/react";
-import { parseDate } from "@internationalized/date";
+import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import React, { useEffect, useState } from "react";
+import { PiXCircle } from "react-icons/pi";
 
 interface CalendarModalProps {
   isOpen: boolean;
@@ -25,6 +28,8 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
 }) => {
   console.log(id);
   const [value, setValue] = useState<DateValue | null>(null);
+  const [deadline, setDeadline] = useState<DateValue | null>(null);
+
   const [loading, isLoading] = useState(false);
 
   useEffect(() => {
@@ -41,11 +46,18 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
 
         const task = await res.json();
 
+        if (task.deadline) {
+          const deadlineOnly = formatDateToYMD(new Date(task.deadline));
+          setDeadline(parseDate(deadlineOnly));
+        } else {
+          setDeadline(null);
+        }
+
         if (task.reminderAt) {
-          const dateOnly = new Date(task.reminderAt)
+          const reminderOnly = new Date(task.reminderAt)
             .toISOString()
             .split("T")[0];
-          setValue(parseDate(dateOnly));
+          setValue(parseDate(reminderOnly));
         } else {
           const today = new Date().toISOString().split("T")[0];
           setValue(parseDate(today));
@@ -85,6 +97,14 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
       onOpenChange(false);
     } catch (err) {
       console.error("Error updating reminder:", err);
+      addToast({
+        title: "Invalid date",
+        description:
+          "Reminder date shouldn’t be greater than the deadline and shouldn’t be set in the past. Please try again.",
+        color: "danger",
+        variant: "solid",
+        icon: <PiXCircle className="w-5 h-5 text-red-500" />,
+      });
     } finally {
       isLoading(false);
     }
@@ -140,6 +160,8 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
                   value={value ?? undefined}
                   onChange={setValue}
                   visibleMonths={2}
+                  minValue={today(getLocalTimeZone())}
+                  maxValue={deadline ?? undefined}
                 />
               </div>
             </ModalBody>
