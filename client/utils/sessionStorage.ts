@@ -6,7 +6,12 @@ import { ActiveSession, SessionLog } from "@/types/index";
 
 export function loadLogs(): SessionLog[] {
   try {
-    return JSON.parse(localStorage.getItem(LOGS_KEY) || "[]");
+    const logs: SessionLog[] = JSON.parse(localStorage.getItem(LOGS_KEY) || "[]");
+
+    const uniqueLogsMap = new Map<string, SessionLog>();
+    logs.forEach(log => uniqueLogsMap.set(log.id, log));
+
+    return Array.from(uniqueLogsMap.values());
   } catch {
     return [];
   }
@@ -15,10 +20,10 @@ export function loadLogs(): SessionLog[] {
 export function addLog(log: SessionLog) {
   const logs = loadLogs();
 
-  // Remove any log with the same id
-  const filteredLogs = logs.filter(l => l.id !== log.id);
+ const filteredLogs = logs.filter(
+  l => l.startedAt !== log.startedAt || l.phase !== log.phase
+);
 
-  // Add the new log at the front
   filteredLogs.unshift(log);
 
   localStorage.setItem(LOGS_KEY, JSON.stringify(filteredLogs.slice(0, MAX_LOGS)));
