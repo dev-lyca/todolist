@@ -3,9 +3,9 @@
 import { useDisclosure } from "@heroui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation"; // ✅ import hook
-import { FaCalendarAlt, FaHome, FaList, FaPlus, FaTasks } from "react-icons/fa";
-import TaskModal from "./modal";
+import { FaHome, FaPlus, FaTasks } from "react-icons/fa";
 import { MdTimer } from "react-icons/md";
+import TaskModal from "./modal";
 
 export default function MobileFooterNav() {
   const {
@@ -14,7 +14,7 @@ export default function MobileFooterNav() {
     onOpenChange: onAddOpenChange,
   } = useDisclosure();
 
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
   const navItems = [
     {
@@ -53,7 +53,6 @@ export default function MobileFooterNav() {
             </Link>
           ))}
 
-          {/* Add button */}
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
             <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-amber-400 to-orange-500 shadow-lg hover:scale-110 transition-transform duration-200">
               <FaPlus className="text-white text-2xl" onClick={onOpenAdd} />

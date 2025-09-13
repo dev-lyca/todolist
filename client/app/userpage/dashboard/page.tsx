@@ -12,7 +12,7 @@ const Dashboard = () => {
   const firstName = user?.displayName?.split(" ")[0];
 
   return (
-    <section className="mt-14 mb-14 overflow-x-hidden">
+    <section className="mt-14 overflow-x-hidden">
       <div className="px-4 bg-gradient-br from-amber-200 to-orange-500">
         <h1 className="text-lg lg:text-xl font-semibold text-gray-50">
           Hi, {firstName}!
@@ -41,7 +41,7 @@ const Dashboard = () => {
       </Card>
 
       <div
-        className="rounded-t-xl rounded-b-md py-2 mt-5 mb-8 mx-2 p-2
+        className="rounded-t-xl rounded-b-md pb-30 py-2 mt-5 mx-2 p-2
        bg-gradient-to-b from-gray-900 via-gray-800 to-gray-800"
       >
         <div className="py-5 p-4">
@@ -52,6 +52,7 @@ const Dashboard = () => {
           <CompletedToday />
           <Divider />
           <OverdueTasks />
+          <Divider />
         </div>
       </div>
     </section>

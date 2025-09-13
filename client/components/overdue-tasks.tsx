@@ -2,7 +2,7 @@
 
 import { useHandleRedirect } from "@/hooks/useHandleRedirect";
 import { Task } from "@/types";
-import { Card, CircularProgress } from "@heroui/react";
+import { CircularProgress } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
 import { GoArrowUpRight } from "react-icons/go";
@@ -33,7 +33,7 @@ const OverdueTasks = () => {
   }, []);
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 mb-4">
       <div className="flex justify-between items-center mb-2">
         <div>
           {" "}
@@ -57,23 +57,22 @@ const OverdueTasks = () => {
           <CircularProgress size="lg" color="default" aria-label="Loading..." />
         </div>
       ) : tasks.length === 0 ? (
-        <Card
-          shadow="lg"
+        <div
           className="rounded-xl border-none mb-4 p-6 flex 
-          flex-col items-center justify-center text-center gap-3 bg-gradient-to-tr
-                  from-gray-500 via-gray-300 to-gray-600"
+          flex-col items-center justify-center text-center gap-3 bg-gradient-to-b
+                  from-gray-900  to-gray-800"
         >
           <div className="p-3 rounded-full bg-red-100">
             <BsFillExclamationCircleFill className="text-red-600 text-3xl" />
           </div>
-          <h3 className="text-gray-900 font-semibold text-lg">
+          <h3 className="text-gray-300 font-semibold text-lg">
             No Overdue Tasks Today
           </h3>
-          <p className="text-gray-800 text-sm">
+          <p className="text-gray-200 text-sm">
             You’ve cleared all past deadlines — nothing is hanging over your
             head!
           </p>
-        </Card>
+        </div>
       ) : (
         <>
           <div className="hidden lg:block ">

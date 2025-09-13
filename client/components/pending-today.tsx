@@ -64,22 +64,21 @@ const PendingToday = () => {
           <CircularProgress size="lg" color="default" aria-label="Loading..." />
         </div>
       ) : pending.length === 0 ? (
-        <Card
-          shadow="lg"
+        <div
           className="rounded-xl border-none mb-4 p-6 flex 
-          flex-col items-center justify-center text-center gap-3 bg-gradient-to-tr
-                  from-gray-500 via-gray-300 to-gray-600"
+          flex-col items-center justify-center text-center gap-3 bg-gradient-to-b
+                  from-gray-900  to-gray-800"
         >
           <div className="p-3 rounded-full bg-gray-100">
             <BsFillClockFill className="text-gray-500 text-4xl" />
           </div>
-          <h3 className="text-gray-900 font-semibold text-lg">
+          <h3 className="text-gray-300 font-semibold text-lg">
             No Pending Tasks Today
           </h3>
-          <p className="text-gray-800 text-sm">
+          <p className="text-gray-200 text-sm">
             Great job staying on track — nothing’s waiting for you right now!
           </p>
-        </Card>
+        </div>
       ) : (
         <>
           <div className="hidden lg:block ">

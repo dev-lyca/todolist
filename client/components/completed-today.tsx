@@ -2,7 +2,7 @@
 
 import { useHandleRedirect } from "@/hooks/useHandleRedirect";
 import { Task } from "@/types";
-import { Card, CircularProgress } from "@heroui/react";
+import { CircularProgress } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { BsCheckCircleFill, BsFillCheckCircleFill } from "react-icons/bs";
 import { GoArrowUpRight } from "react-icons/go";
@@ -58,23 +58,22 @@ const CompletedToday = () => {
           <CircularProgress size="lg" color="default" aria-label="Loading..." />
         </div>
       ) : tasks.length === 0 ? (
-        <Card
-          shadow="lg"
+        <div
           className="rounded-xl border-none mb-4 p-6 flex 
-          flex-col items-center justify-center text-center gap-3 bg-gradient-to-tr
-                  from-gray-500 via-gray-300 to-gray-600"
+          flex-col items-center justify-center text-center gap-3 bg-gradient-to-b
+                  from-gray-900  to-gray-800"
         >
           <div className="p-3 rounded-full bg-green-100">
             <BsFillCheckCircleFill className="text-green-500 text-3xl" />
           </div>
-          <h3 className="text-gray-900 font-semibold text-lg">
+          <h3 className="text-gray-300 font-semibold text-lg">
             No Completed Tasks Today
           </h3>
-          <p className="text-gray-800 text-sm">
+          <p className="text-gray-200 text-sm">
             You haven’t marked anything as completed yet. Once you finish a
             task, it will show up here.
           </p>
-        </Card>
+        </div>
       ) : (
         <>
           <div className="hidden lg:block ">
