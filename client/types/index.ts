@@ -41,3 +41,19 @@ export interface Task {
   createdAt?: string;       
   updatedAt?: string;
 }
+
+export type SessionLog = {
+  id: string;
+  taskId?: string | null;
+  phase: "work" | "break";
+  startedAt: string;       
+  endedAt: string;         
+  durationSeconds: number;
+};
+
+export type ActiveSession = {
+  taskId?: string | null;
+  isWorkPhase: boolean;
+  startedAt: string;
+  totalSeconds: number;
+};

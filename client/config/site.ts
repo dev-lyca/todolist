@@ -1,7 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 import {
   MdOutlineDashboardCustomize,
-  MdOutlineTask
+  MdOutlineTask,
+  MdTimer
 } from "react-icons/md";
 
 export const siteConfig = {
@@ -18,7 +19,12 @@ export const siteConfig = {
       label: "My Task",
       href: "/userpage/mytasks",
       icon: MdOutlineTask,
-    }
+    },
+    {
+      href: "/userpage/timer",
+      label: "TrackTask Focus",
+      icon: MdTimer,
+    },
   ],
 
   links: {
